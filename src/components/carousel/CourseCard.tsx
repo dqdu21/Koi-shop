@@ -22,7 +22,7 @@ const CourseCard: React.FC = () => {
         </div>
         <div className="flex justify-between items-center">
           <p className="text-xs">
-            By <span className="font-medium">Bố mày</span>
+            By <span className="font-medium">Koi Shop</span>
           </p>
           <i className="fa-solid fa-cart-plus ml-14 cursor-pointer"></i>
           <span>$200</span>
