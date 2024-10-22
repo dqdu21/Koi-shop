@@ -10,9 +10,9 @@ const AppHeader: React.FC = () => {
 
   const handleCartClick = () => {
     if (location.pathname === '/cart') {
-      navigate(-1); // Go back to the previous page
+      navigate(-1); 
     } else {
-      navigate('/cart'); // Navigate to the cart page
+      navigate('/cart'); 
     }
   };
 

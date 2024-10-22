@@ -27,10 +27,7 @@ export type CartItem = {
   };
   
   export type CartData = {
-<<<<<<< Updated upstream
     product: any;
-=======
->>>>>>> Stashed changes
     discount: number;
     price: number;
     id: string;
