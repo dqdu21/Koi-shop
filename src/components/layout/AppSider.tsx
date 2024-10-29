@@ -31,7 +31,7 @@ const AppSider: React.FC<{ className?: string }> = () => {
         >
           Information
         </Menu.Item>
-        <SubMenu
+        {/* <SubMenu
           key="sub1"
           icon={<AppstoreOutlined />}
           title="Products"
@@ -46,7 +46,7 @@ const AppSider: React.FC<{ className?: string }> = () => {
           <Menu.Item key="5" className="hover:bg-red-100 text-gray-600 hover:text-red-800">
             Others
           </Menu.Item>
-        </SubMenu>
+        </SubMenu> */}
         <Menu.Item
           key="9"
           icon={<SettingOutlined />}

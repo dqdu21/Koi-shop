@@ -67,7 +67,7 @@ export const createUser = async (userData: {
 }): Promise<UserData> => {
   try {
     const response = await axiosInstance.post(
-      '/api/users/create',
+      '/users/create',
       userData,
     );
 
@@ -94,7 +94,7 @@ export const createUser = async (userData: {
 export const registerUser = async (userData: Partial<User["data"]>) => {
   try {
     const res = await axiosInstance.post<User>(
-      '/api/auth/register',
+      '/auth/register',
       userData,
     );
     console.log(res.data);

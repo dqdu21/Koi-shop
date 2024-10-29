@@ -33,7 +33,7 @@ export const CourseCard: React.FC<{ product: Product }> = ({ product }) => {
         </div>
         <div className="flex justify-between items-center">
           <p className="text-xs">
-            By <span className="font-medium">Koi Farm</span>
+            By <span className="font-medium">Koi Shop</span>
           </p>
           <i className="fa-solid fa-cart-plus ml-14 cursor-pointer"></i>
           <span>${product.price}</span>

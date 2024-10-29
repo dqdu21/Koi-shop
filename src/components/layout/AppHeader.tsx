@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useSider } from '../../app/context/SiderProvider';
 import { Menu, Search, ShoppingCart, User } from 'lucide-react';
 
 const AppHeader: React.FC = () => {
   const { toggleSider } = useSider();
   const navigate = useNavigate();
+
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   // Kiểm tra trạng thái đăng nhập dựa trên token từ localStorage
@@ -17,9 +18,17 @@ const AppHeader: React.FC = () => {
   const handleLogout = () => {
     sessionStorage.removeItem('token'); // Xoá token khỏi localStorage
     setIsLoggedIn(false); // Cập nhật trạng thái đăng xuất
-    navigate('/'); // Điều hướng về trang chủ
-  };
+    navigate('/');
+  } // Điều hướng về trang chủ
+  const location = useLocation();
 
+  const handleCartClick = () => {
+    if (location.pathname === '/cart') {
+      navigate(-1); // Go back to the previous page
+    } else {
+      navigate('/cart'); // Navigate to the cart page
+    }
+  }
   return (
     <div className="flex justify-between items-center w-full bg-white shadow-md ">
       {/* Logo và Menu */}
@@ -30,14 +39,14 @@ const AppHeader: React.FC = () => {
         >
           <Menu size={48} />
         </button>
+        
         <div className="w-24 ml-4">
           <img
-            src="https://media.discordapp.net/attachments/739929914609762425/1282608405969768500/FKoi_1.png?ex=67101869&is=670ec6e9&hm=89684d0acd916f5a4ce568e942418110bb139e1258e75aa9973feda875b80a9b&=&format=webp&quality=lossless&width=1203&height=441"
+            src="https://cdn.discordapp.com/attachments/739929914609762425/1282608405969768500/FKoi_1.png?ex=67228d69&is=67213be9&hm=a8996046c25020b8a62f9d7ab4327559646e577bda3c41f68173907ce370e938&  "
             alt="FKoi Shop"
             className="w-full h-auto"
           />
         </div>
-        {/* Thanh tìm kiếm */}
         <div className="flex-grow max-w-xs ml-4 relative">
           <input
             type="text"
@@ -50,10 +59,12 @@ const AppHeader: React.FC = () => {
 
       {/* Khu vực người dùng và giỏ hàng */}
       <div className="flex items-center space-x-4 pr-4">
-        <button className="p-2 rounded bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
-        onClick={() => navigate('/shopping')}>
-          <ShoppingCart size={24} />
-        </button>
+        <button 
+        className="p-2 rounded bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+        onClick={handleCartClick}
+      >
+        <ShoppingCart size={24} />
+      </button>
         {isLoggedIn ? (
           <>
             {/* Nút Profile */}
@@ -93,5 +104,6 @@ const AppHeader: React.FC = () => {
     </div>
   );
 };
+
 
 export default AppHeader;

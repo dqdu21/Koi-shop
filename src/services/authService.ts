@@ -1,5 +1,6 @@
 import { axiosInstance } from "./axiosInstance";
 import { User } from "../models/Types";
+import axios from "axios";
 
 // Helper function for handling errors
 const handleAuthError = (error: any) => {
@@ -9,20 +10,33 @@ const handleAuthError = (error: any) => {
   return error.message;
 };
 
-export const login = async (email: string, password: string): Promise<string> => {
+// export const login = async (email: string, password: string): Promise<string> => {
+//   try {
+//     const response = await axiosInstance.post("/auth/login", { email, password }, {withCredentials: true});
+//     const token = response.data.token || response.data.accessToken || response.data.data?.token;
+//     if (token) {
+//       sessionStorage.setItem("token", token);
+//       return token;
+//     }
+//     throw new Error("Token not found in response!");
+//   } catch (error) {
+//     throw new Error(handleAuthError(error));
+//   }
+// };
+
+interface LoginResponse {
+  token: string;
+  user: User; // Đảm bảo rằng User là một interface đã định nghĩa
+}
+
+export const login = async (email: string, password: string) => {
   try {
-    const response = await axiosInstance.post("/api/auth/login", { email, password });
-    const token = response.data.token || response.data.accessToken || response.data.data?.token;
-    if (token) {
-      sessionStorage.setItem("token", token);
-      return token;
-    }
-    throw new Error("Token not found in response!");
+    const response = await axiosInstance.post("/auth/login", { email, password });
+    return response.data; // Đảm bảo trả về dữ liệu đúng cấu trúc { token, user }
   } catch (error) {
-    throw new Error(handleAuthError(error));
+    throw new Error("Invalid email or password.");
   }
 };
-
 // export const loginViaGoogleAPI = async (credential: string): Promise<string> => {
 //   try {
 //     const res = await axiosInstance.post("/api/auth/google", { google_id: credential });
@@ -65,7 +79,7 @@ export const login = async (email: string, password: string): Promise<string> =>
 
 export const getCurrentLogin = async (token: string): Promise<User> => {
   try {
-    const res = await axiosInstance.get("/api/auth/", {
+    const res = await axiosInstance.get("/auth/", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
