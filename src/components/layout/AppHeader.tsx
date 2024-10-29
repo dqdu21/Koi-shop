@@ -6,6 +6,15 @@ import { Menu, Search, ShoppingCart, User } from 'lucide-react';
 const AppHeader: React.FC = () => {
   const { toggleSider } = useSider();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleCartClick = () => {
+    if (location.pathname === '/cart') {
+      navigate(-1); // Go back to the previous page
+    } else {
+      navigate('/cart'); // Navigate to the cart page
+    }
+  };
 
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
@@ -20,15 +29,7 @@ const AppHeader: React.FC = () => {
     setIsLoggedIn(false); // Cập nhật trạng thái đăng xuất
     navigate('/');
   } // Điều hướng về trang chủ
-  const location = useLocation();
 
-  const handleCartClick = () => {
-    if (location.pathname === '/cart') {
-      navigate(-1); // Go back to the previous page
-    } else {
-      navigate('/cart'); // Navigate to the cart page
-    }
-  }
   return (
     <div className="flex justify-between items-center w-full bg-white shadow-md ">
       {/* Logo và Menu */}
@@ -47,6 +48,7 @@ const AppHeader: React.FC = () => {
             className="w-full h-auto"
           />
         </div>
+
         <div className="flex-grow max-w-xs ml-4 relative">
           <input
             type="text"
@@ -104,6 +106,5 @@ const AppHeader: React.FC = () => {
     </div>
   );
 };
-
 
 export default AppHeader;

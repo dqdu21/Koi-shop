@@ -11,7 +11,8 @@ export const getCartsAPI = async (): Promise<CartResponse> => {
 export const addToCartAPI = async (cartId: string, productId: string) => {
   const response = await axiosInstance.post(`/cart/${cartId}/product/add`, { productId });
   return response.data;
-};
+}
+
 
 
 export const createCartAPI = async (cartData: Partial<CartData>) => {
