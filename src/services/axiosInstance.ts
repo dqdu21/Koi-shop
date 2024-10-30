@@ -5,10 +5,12 @@ import { store } from "../app/redux/store";
 import { startLoading, stopLoading } from "../app/redux/loading/loadingSlice";
 
 export const axiosInstance = axios.create({
-    baseURL: APILink,
+  baseURL: APILink,
   headers: {
-    "content-type": "application/json; charset=UTF-8",
+    "Content-Type": "application/json",
+    'Accept': 'application/json'
   },
+  withCredentials: true,
   timeout: 300000,
   timeoutErrorMessage: `Connection is timeout exceeded`,
 });

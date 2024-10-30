@@ -1,11 +1,12 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import HomePage from '../pages/HomePage';
-import SigninPage from '../pages/SigninPage';
-import SignupPage from '../pages/SignupPage';
-import Consignment from '../pages/Consignment';
-import WelcomeAdmin from '../pages/admin/welcome/WelcomeAdmin'
-import WelcomeStaff from '../pages/staff/welcome/WelcomeStaff'
-import ConsignmentForm from '../pages/ConsignmentForm';
+import HomePage from './pages/HomePage';
+import SigninPage from './pages/SigninPage';
+import SignupPage from './pages/SignupPage';
+import CartPage from './pages/CartPage';
+import ConsignmentForm from './pages/ConsignmentForm';
+import Consignment from './pages/Consignment';
+import WelcomeStaff from './pages/staff/welcome/WelcomeStaff';
+import WelcomeAdmin from './pages/admin/welcome/WelcomeAdmin';
 
 const AppRouter = () => {
   return (

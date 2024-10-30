@@ -1,5 +1,7 @@
 import React from 'react';
 import { Menu } from 'antd';
+import { useNavigate } from 'react-router-dom';
+
 import { HomeOutlined, InfoCircleOutlined, AppstoreOutlined, SettingOutlined, QuestionCircleOutlined, PhoneOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,7 +9,6 @@ const { SubMenu } = Menu;
 
 const AppSider: React.FC<{ className?: string }> = () => {
   const navigate = useNavigate();
-
   return (
     <div className={`h-[calc(100vh-4rem)] bg-white `}>
       <Menu
@@ -20,54 +21,53 @@ const AppSider: React.FC<{ className?: string }> = () => {
           key="1"
           icon={<HomeOutlined />}
           className="hover:bg-red-100 text-gray-700 hover:text-red-800"
-          onClick={() => navigate("/")}
+          onClick={() => navigate('/')}
         >
-          Trang chủ
+          Home
         </Menu.Item>
         <Menu.Item
           key="2"
           icon={<InfoCircleOutlined />}
           className="hover:bg-red-100 text-gray-700 hover:text-red-800"
         >
-          Thông tin
+          Information
         </Menu.Item>
         {/* <SubMenu
           key="sub1"
           icon={<AppstoreOutlined />}
-          title="Các sản phẩm"
+          title="Products"
           className="text-gray-700 hover:text-red-800"
         >
           <Menu.Item key="3" className="hover:bg-red-100 text-gray-600 hover:text-red-800">
-            Đồ ăn
+            Food
           </Menu.Item>
           <Menu.Item key="4" className="hover:bg-red-100 text-gray-600 hover:text-red-800">
-            Phụ kiện
+            Item
           </Menu.Item>
           <Menu.Item key="5" className="hover:bg-red-100 text-gray-600 hover:text-red-800">
-            Hệ thống lọc
+            Others
           </Menu.Item>
         </SubMenu> */}
         <Menu.Item
           key="9"
           icon={<SettingOutlined />}
           className="hover:bg-red-100 text-gray-700 hover:text-red-800"
-          onClick={() => navigate("/consignment")}
-          >
-          Hệ thống ký gửi
+        >
+          Consignment system
         </Menu.Item>
         <Menu.Item
           key="10"
           icon={<QuestionCircleOutlined />}
           className="hover:bg-red-100 text-gray-700 hover:text-red-800"
         >
-          Hỗ trợ
+          Help
         </Menu.Item>
         <Menu.Item
           key="11"
           icon={<PhoneOutlined />}
           className="hover:bg-red-100 text-gray-700 hover:text-red-800"
         >
-          Liên hệ
+          Contact
         </Menu.Item>
       </Menu>
     </div>

@@ -44,6 +44,9 @@ export type User = {
   };
 };
 
+
+
+
 export type SearchCondition = {
   keyword?: string;
   role: string;
@@ -126,5 +129,78 @@ export type ApiResponse = {
 // Course
 export type SiderProviderProps = {
   children: ReactNode;
+};
+
+export type HelpSubTabProps = {
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
+};
+
+export type CourseBoxProps = {
+  courseData: {
+    title: String;
+    description: string;
+  };
+};
+
+// export type CourseSubTabProps = {
+//   _id: string;
+//   activeTab: string;
+//   setActiveTab: (tab: string) => void;
+//   onSelectedCourse: (id: string) => void;
+//   content: CourseDetail["content"];
+//   sessions: CourseDetail["session_list"];
+// };
+
+export type CourseHelpProps = {
+  helpData: {
+    title: String;
+  };
+};
+
+export type HelpCardProps = {
+  iconClass: string;
+  title: string;
+  description: string;
+};
+
+export type InstructorChannelProps = {
+  instructor: string;
+  students: number;
+  likes: number;
+  dislikes: number;
+  shares: number;
+};
+
+export type Course = {
+  id: string;
+  courseName: string;
+  categoryName: string;
+  instructorName: string;
+  image: string;
+  price: number;
+};
+
+export type SignUpPayload = {
+  fullName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  role: string;
+};
+
+export type SignUpFormValues = {
+  fullName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  role: string;
+};
+
+export type ExtendedJwtPayload = {
+  email: string;
+  name: string;
+  role: string;
+  picture: string;
 };
 
