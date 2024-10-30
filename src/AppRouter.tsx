@@ -13,8 +13,9 @@ const AppRouter = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="sign-in" element={<SigninPage />} />
-        <Route path="sign-up" element={<SignupPage />} />
+        <Route path="/sign-in" element={<SigninPage />} />
+        <Route path="/sign-up" element={<SignupPage />} />
+        <Route path="/cart" element={<CartPage />} />
         <Route path="/consignment" element={<Consignment/>} />
         <Route path="/consignment-form" element={<ConsignmentForm/>} />
                     {/* Admin Routes */}

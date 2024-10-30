@@ -3,7 +3,6 @@ import { Menu } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 import { HomeOutlined, InfoCircleOutlined, AppstoreOutlined, SettingOutlined, QuestionCircleOutlined, PhoneOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
 
 const { SubMenu } = Menu;
 
@@ -52,7 +51,9 @@ const AppSider: React.FC<{ className?: string }> = () => {
           key="9"
           icon={<SettingOutlined />}
           className="hover:bg-red-100 text-gray-700 hover:text-red-800"
+          onClick={() => navigate("/consignment")}
         >
+          
           Consignment system
         </Menu.Item>
         <Menu.Item
