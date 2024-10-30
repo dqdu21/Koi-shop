@@ -7,6 +7,7 @@ import ConsignmentForm from './pages/ConsignmentForm';
 import Consignment from './pages/Consignment';
 import WelcomeStaff from './pages/staff/welcome/WelcomeStaff';
 import WelcomeAdmin from './pages/admin/welcome/WelcomeAdmin';
+import About from './pages/About';
 
 const AppRouter = () => {
   return (
@@ -15,6 +16,8 @@ const AppRouter = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="sign-in" element={<SigninPage />} />
         <Route path="sign-up" element={<SignupPage />} />
+        <Route path="about" element={<About />} />
+        <Route path="cart" element={<CartPage />} />
         <Route path="/consignment" element={<Consignment/>} />
         <Route path="/consignment-form" element={<ConsignmentForm/>} />
                     {/* Admin Routes */}

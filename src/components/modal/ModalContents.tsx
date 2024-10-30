@@ -48,7 +48,7 @@ const ModalContents: React.FC<TocProps> = ({ headings }) => {
       {isOpen && (
         <div className="toc-table-of-contents shadow rounded border">
           <div className="toc-header border-b flex justify-between">
-            <span>Mục Lục</span>
+            <span>CONTENTS</span>
             <button className="close-button" onClick={() => setIsOpen(false)}>x</button>
             </div>
           <div className="toc-content">
