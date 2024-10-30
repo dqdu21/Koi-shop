@@ -72,7 +72,7 @@ const HomePage: React.FC = () => {
 
   const handleAddToCart = async (product: Product) => {
     try {
-      const cartId = '26f157fd-80a2-48e5-3948-08dcf8697f41'; // Use the actual cart ID
+      const cartId = '37ab9331-f39a-4072-80ad-4adc3684fcec'; // Use the actual cart ID
       const response = await axiosInstance.post(
         `https://koifarmshop.online/api/cart/${cartId}/product/add`,
         {
