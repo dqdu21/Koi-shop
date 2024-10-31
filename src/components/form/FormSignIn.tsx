@@ -78,12 +78,12 @@ interface LoginUser extends User {
   email: string;
 }
 
-const handleLogin = async (values: { email: string; password: string }) => {
+const handleLogin = async (values: { email: string; password: string; role: string }) => {
   try {
     setLoading(true);
     
     // Gọi API đăng nhập
-    const response = await loginService(values.email, values.password);
+    const response = await loginService(values.email, values.password, values.role);
     
     // Kiểm tra phản hồi từ API
     if (response.isSuccess && response.result.data.accessToken) {
@@ -103,7 +103,13 @@ const handleLogin = async (values: { email: string; password: string }) => {
         message: "Login Successful",
       });
       setLoading(false);
-      navigate("/");
+      if (values.email === "giangnnt260703@gmail.com") {
+        navigate("/admin");
+      } else if (values.role === "MANAGER") {
+        navigate("/staff");
+      } else {
+        navigate("/");
+      }
     }
   } catch (error: any) {
     notification.error({

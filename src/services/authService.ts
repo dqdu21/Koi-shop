@@ -12,9 +12,9 @@ const handleAuthError = (error: any) => {
 
 
 
-export const login = async (email: string, password: string) => {
+export const login = async (email: string, password: string, role:string) => {
   try {
-    const response = await axiosInstance.post("/auth/login", { email, password });
+    const response = await axiosInstance.post("/auth/login", { email, password, role });
     return response.data; // Đảm bảo trả về dữ liệu đúng cấu trúc { token, user }
   } catch (error) {
     throw new Error("Invalid email or password.");
