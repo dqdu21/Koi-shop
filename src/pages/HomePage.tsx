@@ -108,41 +108,39 @@ const HomePage: React.FC = () => {
             </div>
             <Information />
             <div className="p-8">
-  {categories.map(category => (
-    <section key={category.id} className="mt-10">
-      <div className="w-full flex justify-between mb-5">
-        <h1 className="font-bold text-xl">{category.name}</h1>
-        <a href="#" className="hover:text-amber-600 font-light">See all</a>
-      </div>
-      {/* Change grid-cols-2 to grid-cols-4 for 4 products per row */}
-      <div className="grid grid-cols-4 gap-4">
-        {category.products.map(product => (
-          <article key={product.id} className="rounded-md bg-slate-200 drop-shadow-md p-4">
-            <img
-              src="https://esuhai.vn/upload/fck_new/image/4Nursery/SONG%20&%20LV%20TAI%20NB/2022/T5/van-hoa-nhat-ban-esuhai-kaizen-ca-koi-2.jpg" // Use product image when available
-              alt={product.name}
-              className="w-full h-auto rounded-md" // Optional: style for image
-            />
-            <div className="flex justify-between my-3">
-              <span>{product.inventory} in stock</span>
-              <i className="fa-solid fa-ellipsis-vertical cursor-pointer"></i>
-            </div>
-            <h3 className="font-semibold">{product.name}</h3>
-            <div className="flex justify-between items-center">
-              <p className="text-xs">
-                By <span className="font-medium">Koi Farm</span>
-              </p>
-              <button onClick={() => handleAddToCart(product)} className="bg-amber-500 text-white py-1 px-3 rounded">
-                Add to Cart
-              </button>
-              <span>${product.price}</span>
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
-  ))}
-  <Achievements />
+              {categories.map(category => (
+                <section key={category.id} className="mt-10">
+                  <div className="w-full flex justify-between mb-5">
+                    <h1 className="font-bold text-xl">{category.name}</h1>
+                    <a href="#" className="hover:text-amber-600 font-light">See all</a>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    {category.products.map(product => (
+                      <article key={product.id} className="rounded-md bg-slate-200 drop-shadow-md p-4">
+                        <img
+                          src="https://esuhai.vn/upload/fck_new/image/4Nursery/SONG%20&%20LV%20TAI%20NB/2022/T5/van-hoa-nhat-ban-esuhai-kaizen-ca-koi-2.jpg" // Use product image when available
+                          alt={product.name}
+                        />
+                        <div className="flex justify-between my-3">
+                          <span>{product.inventory} in stock</span>
+                          <i className="fa-solid fa-ellipsis-vertical cursor-pointer"></i>
+                        </div>
+                        <h3 className="font-semibold">{product.name}</h3>
+                        <div className="flex justify-between items-center">
+                          <p className="text-xs">
+                            By <span className="font-medium">Koi Farm</span>
+                          </p>
+                          <button onClick={() => handleAddToCart(product)} className="bg-amber-500 text-white py-1 px-3 rounded">
+                            Add to Cart
+                          </button>
+                          <span>${product.price}</span>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </section>
+              ))}
+              <Achievements />
               <section>
                 <div className="w-full flex justify-between mb-5">
                   <h1 className="font-bold text-xl">Chủ shop</h1>
@@ -155,7 +153,6 @@ const HomePage: React.FC = () => {
                 <CarouselReview />
               </section>
             </div>
-
             <Footer className="footer mt-auto">
               <AppFooter />
             </Footer>

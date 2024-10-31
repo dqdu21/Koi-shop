@@ -1,9 +1,10 @@
 import React from 'react';
 import { Menu } from 'antd';
-import { useNavigate } from 'react-router-dom';
 import { HomeOutlined, InfoCircleOutlined, AppstoreOutlined, SettingOutlined, QuestionCircleOutlined, PhoneOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 import { Book } from '@mui/icons-material';
-import SubMenu from 'antd/es/menu/SubMenu';
+
+const { SubMenu } = Menu;
 
 const AppSider: React.FC<{ className?: string }> = () => {
   const navigate = useNavigate();
@@ -54,7 +55,7 @@ const AppSider: React.FC<{ className?: string }> = () => {
           className="hover:bg-red-100 text-gray-700 hover:text-red-800"
           onClick={() => navigate("/consignment")}
         >
-          Consignment
+          Consignment system
         </Menu.Item>
 
         <Menu.SubMenu
