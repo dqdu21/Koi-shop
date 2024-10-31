@@ -10,6 +10,7 @@ import Sider from 'antd/es/layout/Sider';
 import { Content, Footer, Header } from 'antd/es/layout/layout';
 import AppSider from '../components/layout/AppSider';
 import { useSider } from '../app/context/SiderProvider';
+import { useAuth } from "../routes/AuthContext";
 
 const CartPage: React.FC = () => {
   const [cartItems, setCartItems] = useState<CartItemType[]>([]);
@@ -19,6 +20,13 @@ const CartPage: React.FC = () => {
   const [pricePaid, setPricePaid] = useState(0);
   const { collapsed } = useSider();
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
+  const { isLoggedIn } = useAuth();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      setLoading(true);
+    }
+  }, [isLoggedIn]);
 
   useEffect(() => {
     const fetchCartItems = async () => {
@@ -34,7 +42,7 @@ const CartPage: React.FC = () => {
           notification.info({ message: 'Info', description: 'No cart found.' });
         }
       } catch (error: any) {
-        notification.error({ message: 'Error', description: error.message });
+       
       } finally {
         setLoading(false);
       }
@@ -90,11 +98,15 @@ const CartPage: React.FC = () => {
               <h1 className="text-2xl font-bold mb-6">Your Cart</h1>
 
               {loading ? (
-                <p>Loading...</p>
-              ) : cartItems.length === 0 ? (
-                <p>Your cart is empty</p>
-              ) : (
-                <>
+        <p>Loading...</p>
+      ) : !isLoggedIn ? (
+        <div>
+          <p>Please sign in to view your cart.</p>
+        </div>
+      ) : cartItems.length === 0 ? (
+        <p>Your cart is empty</p>
+      ) : (
+        <>
                   <div className="mb-6">
                     {cartItems.map((item) => (
                       <CartItem

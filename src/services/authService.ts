@@ -10,20 +10,16 @@ const handleAuthError = (error: any) => {
   return error.message;
 };
 
-export const login = async (email: string, password: string): Promise<string> => {
+
+
+export const login = async (email: string, password: string) => {
   try {
-    const response = await axios.post("https://koifarmshop.online/api/auth/login", { email, password });
-    const token = response.data.token || response.data.accessToken || response.data?.token;
-    if (token) {
-      sessionStorage.setItem("token", token);
-      return token;
-    }
-    throw new Error("Token not found in response!");
+    const response = await axiosInstance.post("/auth/login", { email, password });
+    return response.data; // Đảm bảo trả về dữ liệu đúng cấu trúc { token, user }
   } catch (error) {
-    throw new Error(handleAuthError(error));
+    throw new Error("Invalid email or password.");
   }
 };
-
 // export const loginViaGoogleAPI = async (credential: string): Promise<string> => {
 //   try {
 //     const res = await axiosInstance.post("/api/auth/google", { google_id: credential });
@@ -65,37 +61,37 @@ export const login = async (email: string, password: string): Promise<string> =>
 // };
 
 export const getCurrentLogin = async (token: string): Promise<User> => {
-  try {
-    const res = await axiosInstance.get("/auth/", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const user = res.data;
-    if (user) {
-      sessionStorage.setItem("user", JSON.stringify(user));
-      return user;
+    try {
+      const res = await axiosInstance.get("/auth/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const user = res.data;
+      if (user) {
+        sessionStorage.setItem("user", JSON.stringify(user));
+        return user;
+      }
+      throw new Error("Cannot get user data!");
+    } catch (error) {
+      throw new Error(handleAuthError(error));
     }
-    throw new Error("Cannot get user data!");
-  } catch (error) {
-    throw new Error(handleAuthError(error));
-  }
-};
-
-// export const verifyEmailAPI = async (token: string): Promise<boolean> => {
-//   try {
-//     const res = await axiosInstance.post("/api/auth/verify-token", { token });
-//     return res.data.success;
-//   } catch (error) {
-//     throw new Error(handleAuthError(error));
-//   }
-// };
-
-// export const resendEmailAPI = async (email: string): Promise<boolean> => {
-//   try {
-//     const res = await axiosInstance.post("/api/auth/resend-token", { email });
-//     return res.data.success;
-//   } catch (error) {
+  };
+  
+  // export const verifyEmailAPI = async (token: string): Promise<boolean> => {
+  //   try {
+  //     const res = await axiosInstance.post("/api/auth/verify-token", { token });
+  //     return res.data.success;
+  //   } catch (error) {
+  //     throw new Error(handleAuthError(error));
+  //   }
+  // };
+  
+  // export const resendEmailAPI = async (email: string): Promise<boolean> => {
+  //   try {
+  //     const res = await axiosInstance.post("/api/auth/resend-token", { email });
+  //     return res.data.success;
+  //   } catch (error) {
 //     throw new Error(handleAuthError(error));
 //   }
 // };
@@ -110,20 +106,20 @@ export const getCurrentLogin = async (token: string): Promise<User> => {
 // };
 
 export const logout = async (): Promise<void> => {
-  try {
-    const token = sessionStorage.getItem("token");
-    if (!token) throw new Error("Token not found!");
-
-    await axiosInstance.get("/api/auth/logout", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    sessionStorage.removeItem("user");
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("userRole");
-  } catch (error) {
-    throw new Error(handleAuthError(error));
-  }
-};
+    try {
+      const token = sessionStorage.getItem("token");
+      if (!token) throw new Error("Token not found!");
+  
+      await axiosInstance.get("/api/auth/logout", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      sessionStorage.removeItem("user");
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("userRole");
+    } catch (error) {
+      throw new Error(handleAuthError(error));
+    }
+  };
