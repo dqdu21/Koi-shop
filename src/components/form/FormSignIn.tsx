@@ -78,38 +78,45 @@ interface LoginUser extends User {
   email: string;
 }
 
-const handleLogin = async (values: { email: string; password: string; role: string }) => {
+const handleLogin = async (values: { email: string; password: string }) => {
   try {
     setLoading(true);
-    
-    // Gọi API đăng nhập
-    const response = await loginService(values.email, values.password, values.role);
-    
-    // Kiểm tra phản hồi từ API
-    if (response.isSuccess && response.result.data.accessToken) {
-      const token = response.result.data.accessToken;
-      // Create a LoginUser object with additional properties like role
+
+    // Call the loginService with the new API
+    const response = await loginService(values.email, values.password);
+
+    // Check the response and get the token and user data
+    if (response.success && response.data.token) {
+      const token = response.data.token;
       const loginUser: LoginUser = {
-        ...response.result.data.user, // Assume this has User properties
-        role: response.result.data.roleId // Include role
+        ...response.data.user, // Assume the response includes user details
+        role: response.data.role // Adjust if the role key is different
       };
-      // Extract only User properties for the context
+
+      // Extract only the User properties for the context
       const { email, ...userData } = loginUser;
       
-      login(token, userData); // Lưu thông tin vào context với User properties only
-      sessionStorage.setItem("userEmail", email); // Store email separately
-      
+      // Store login information in Auth context and session storage
+      login(token, userData); // Pass User properties only
+      sessionStorage.setItem("userEmail", email);
+
+      // Show success notification
       notification.success({
         message: "Login Successful",
       });
+      
       setLoading(false);
+
+      // Redirect based on role or email
       if (values.email === "giangnnt260703@gmail.com") {
         navigate("/admin");
-      } else if (values.role === "MANAGER") {
+      } else if (values.email === "MANAGER") {
         navigate("/staff");
       } else {
         navigate("/");
       }
+    } else {
+      throw new Error("Login failed: Invalid response format");
     }
   } catch (error: any) {
     notification.error({
@@ -120,6 +127,7 @@ const handleLogin = async (values: { email: string; password: string; role: stri
     setLoading(false);
   }
 };
+
 
   
 
