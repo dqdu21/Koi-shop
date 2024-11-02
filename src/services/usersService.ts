@@ -1,3 +1,4 @@
+import { message } from "antd";
 import {
   User,
   UserData,
@@ -97,11 +98,15 @@ export const registerUser = async (userData: Partial<User["data"]>) => {
       '/auth/register',
       userData,
     );
-    console.log(res.data);
-    return res.data;
+    return {
+      message: (res.data as any).message,
+      statusCode: (res.data as any).statusCode,
+    };
   } catch (error: any) {
-    if (error.response && error.response.data)
+    if (error.response && error.response.data){
       throw new Error(error.response.data.message);
+    }
+    return undefined;
   }
 };
 //--------------------------------------------------------------------------------------------
