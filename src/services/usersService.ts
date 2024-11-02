@@ -26,9 +26,9 @@ export const getUsers = async (
 //------------------------------ Get User Detail ------------------------------------------------
 export const getUserDetail = async (userId: string): Promise<UserData> => {
   try {
-    const response = await axiosInstance.get(`/api/users/${userId}`);
+    const response = await axiosInstance.get(`/user/${userId}`);
     const userData: UserData = response.data.data;
-
+    console.log('userData :>> ', userData);
     if (userData) {
       return userData;
     } else {
@@ -39,7 +39,6 @@ export const getUserDetail = async (userId: string): Promise<UserData> => {
     throw new Error(errorMessage);
   }
 };
-
 //-----------------------------------------------------------------------------------------------
 
 //--------------------------------- Delete User (Admin) -----------------------------------------

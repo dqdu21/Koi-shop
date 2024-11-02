@@ -84,7 +84,7 @@ const handleLogin = async (values: { email: string; password: string }) => {
     
     // Gọi API đăng nhập
     const response = await loginService(values.email, values.password);
-    
+    console.log('response :>> ', response);
     // Kiểm tra phản hồi từ API
     if (response.isSuccess && response.result.data.accessToken) {
       const token = response.result.data.accessToken;

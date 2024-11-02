@@ -8,6 +8,7 @@ import Consignment from './pages/Consignment';
 import WelcomeStaff from './pages/staff/welcome/WelcomeStaff';
 import WelcomeAdmin from './pages/admin/welcome/WelcomeAdmin';
 import ProductDetail from './pages/ProductDetail';
+import Profile from './pages/Profile';
 
 const AppRouter = () => {
   return (
@@ -19,6 +20,7 @@ const AppRouter = () => {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/product/:productID" element={<ProductDetail />} />
         <Route path="/consignment" element={<Consignment/>} />
+        <Route path="/profile" element={<Profile/>} />
         <Route path="/consignment-form" element={<ConsignmentForm/>} />
                     {/* Admin Routes */}
         <Route path="/admin" element={<WelcomeAdmin />} />
