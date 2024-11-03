@@ -40,7 +40,22 @@ export const getUserDetail = async (userId: string): Promise<UserData> => {
   }
 };
 //-----------------------------------------------------------------------------------------------
-
+//------------------------------ Get profile User ------------------------------------------------
+export const getProfile = async (): Promise<User> => {
+  try {
+    const response = await axiosInstance.get(`/user/own`);
+    const userData: User = response.data.result;
+    if (userData) {
+      return userData;
+    } else {
+      throw new Error("User data not found");
+    }
+  } catch (error: any) {
+    const errorMessage = error.response?.data?.message || "An unknown error occurred";
+    throw new Error(errorMessage);
+  }
+};
+//-----------------------------------------------------------------------------------------------
 //--------------------------------- Delete User (Admin) -----------------------------------------
 export const deleteUser = async (userId: string): Promise<void> => {
   try {
@@ -58,6 +73,29 @@ export const deleteUser = async (userId: string): Promise<void> => {
 };
 //-----------------------------------------------------------------------------------------------
 
+//--------------------------------- ChangePassword -----------------------------------------
+export const changePassword = async (refreshToken: string, oldPassword: string, newPassword: string): Promise<any> => {
+  console.log('refreshToken :>> ', refreshToken);
+  const token = sessionStorage.getItem("token")
+  try {
+    const response =  await axiosInstance.put(`/user/change-password?token=${refreshToken}`, {
+      oldPassword,
+      newPassword,
+    }, {
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+    console.log('response :>> ', response);
+    return response.data;
+  } catch (error: any) {
+    if (error.response && error.response.data && error.response.data.message) {
+      throw new Error(error.response.data.message);
+    }
+    throw new Error(error.message);
+  }
+};
+//-----------------------------------------------------------------------------------------------
 //----------------------------------Create User (Public)-----------------------------------------
 export const createUser = async (userData: {
   name: string;

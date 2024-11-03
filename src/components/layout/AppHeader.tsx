@@ -26,6 +26,7 @@ const AppHeader: React.FC = () => {
 
   const handleLogout = () => {
     sessionStorage.removeItem('token'); // Xoá token khỏi localStorage
+    sessionStorage.removeItem('refreshToken');
     setIsLoggedIn(false); // Cập nhật trạng thái đăng xuất
     navigate('/');
   } // Điều hướng về trang chủ

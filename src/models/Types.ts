@@ -13,7 +13,13 @@ export type AuthContextType = {
   setUser: (user: User) => void;
   getRole: () => string | null;
 };
-
+export type Address = {
+  id: string;
+  street: string;
+  wardCode: string;
+  districtId : string;
+  provinceId : string;
+}
 // User
 export type User = {
   data: {
@@ -23,9 +29,10 @@ export type User = {
     password: string;
     role: string;
     name: string;
+    fullName: string;
     dob: string;
-    phone_number: string;
-    address: string;
+    phone: string;
+    address: Address[];
     avatar: string;
     video: string;
     status: boolean;

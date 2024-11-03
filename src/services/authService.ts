@@ -119,6 +119,7 @@ export const logout = async (): Promise<void> => {
   
       sessionStorage.removeItem("user");
       sessionStorage.removeItem("token");
+      sessionStorage.removeItem('refreshToken');
       sessionStorage.removeItem("userRole");
     } catch (error) {
       throw new Error(handleAuthError(error));
