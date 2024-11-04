@@ -63,7 +63,7 @@ export const login = async (email: string, password: string) => {
 
 export const getCurrentLogin = async (token: string): Promise<User> => {
     try {
-      const res = await axiosInstance.get("/auth/login", {
+      const res = await axiosInstance.get("/user/own", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -71,14 +71,14 @@ export const getCurrentLogin = async (token: string): Promise<User> => {
       const user = res.data;
       if (user) {
         sessionStorage.setItem("user", JSON.stringify(user));
-        return user;
+        return user.result.data;
       }
       throw new Error("Cannot get user data!");
     } catch (error) {
       throw new Error(handleAuthError(error));
     }
   };
-  
+
   // export const verifyEmailAPI = async (token: string): Promise<boolean> => {
   //   try {
   //     const res = await axiosInstance.post("/api/auth/verify-token", { token });
@@ -87,7 +87,7 @@ export const getCurrentLogin = async (token: string): Promise<User> => {
   //     throw new Error(handleAuthError(error));
   //   }
   // };
-  
+
   // export const resendEmailAPI = async (email: string): Promise<boolean> => {
   //   try {
   //     const res = await axiosInstance.post("/api/auth/resend-token", { email });
@@ -110,13 +110,13 @@ export const logout = async (): Promise<void> => {
     try {
       const token = sessionStorage.getItem("token");
       if (!token) throw new Error("Token not found!");
-  
+
       await axiosInstance.get("/api/auth/logout", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-  
+
       sessionStorage.removeItem("user");
       sessionStorage.removeItem("token");
       sessionStorage.removeItem('refreshToken');

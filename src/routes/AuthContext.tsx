@@ -43,12 +43,14 @@
 // context/AuthContext.tsx
 import { createContext, useContext, useEffect, useState } from "react";
 import { User } from "../../src/models/Types"; // Đảm bảo rằng User là một interface đã định nghĩa
+import { getCurrentLogin } from "../services/authService";
 
 interface AuthContextType {
   user: User | null;
   isLoggedIn: boolean;
   login: (token: string, userData: User) => void;
   logout: () => void;
+  getUserCurrent: (token: any) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -59,33 +61,41 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Kiểm tra token khi app khởi chạy
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const userData = localStorage.getItem("user");
+    const token = sessionStorage.getItem("token");
+    // const userData = localStorage.getItem("user");
 
-    if (token && userData) {
+    if (token) {
       setIsLoggedIn(true);
-      setUser(JSON.parse(userData)); // Phục hồi thông tin user từ localStorage
+      getUserCurrent(token)
     }
   }, []);
 
   // Hàm đăng nhập
   const login = (token: string, userData: User) => {
-    localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(userData));
+    sessionStorage.setItem("token", token);
+    sessionStorage.setItem("user", JSON.stringify(userData));
     setIsLoggedIn(true);
     setUser(userData);
   };
 
+
   // Hàm đăng xuất
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
     setIsLoggedIn(false);
     setUser(null);
   };
 
+  //Hàm get thông tin hiện tại
+  const getUserCurrent = async (token:any) => {
+    const res = await getCurrentLogin(token);
+    setUser(res);
+
+    console.log(res);
+  }
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn, login, logout }}>
+    <AuthContext.Provider value={{ user, isLoggedIn, login, logout,getUserCurrent }}>
       {children}
     </AuthContext.Provider>
   );
