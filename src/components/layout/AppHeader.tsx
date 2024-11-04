@@ -26,6 +26,7 @@ const AppHeader: React.FC = () => {
 
   const handleLogout = () => {
     sessionStorage.removeItem('token'); // Xoá token khỏi localStorage
+    sessionStorage.removeItem('refreshToken');
     setIsLoggedIn(false); // Cập nhật trạng thái đăng xuất
     navigate('/');
   } // Điều hướng về trang chủ
@@ -43,7 +44,7 @@ const AppHeader: React.FC = () => {
         
         <div className="w-24 ml-4">
           <img
-            src="https://cdn.discordapp.com/attachments/739929914609762425/1282608405969768500/FKoi_1.png?ex=67228d69&is=67213be9&hm=a8996046c25020b8a62f9d7ab4327559646e577bda3c41f68173907ce370e938&  "
+            src="src/assets/images/Fkoi_1.png"
             alt="FKoi Shop"
             className="w-full h-auto"
           />

@@ -12,7 +12,7 @@ const handleAuthError = (error: any) => {
 
 
 
-export const login = async (email: string, password: string, role:string) => {
+export const login = async (email: string, password: string) => {
   try {
     const response = await axiosInstance.post("/auth/login", { email, password, role });
     console.log(response.data);
@@ -63,7 +63,7 @@ export const login = async (email: string, password: string, role:string) => {
 
 export const getCurrentLogin = async (token: string): Promise<User> => {
     try {
-      const res = await axiosInstance.get("/auth/", {
+      const res = await axiosInstance.get("/auth/login", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -119,6 +119,7 @@ export const logout = async (): Promise<void> => {
   
       sessionStorage.removeItem("user");
       sessionStorage.removeItem("token");
+      sessionStorage.removeItem('refreshToken');
       sessionStorage.removeItem("userRole");
     } catch (error) {
       throw new Error(handleAuthError(error));

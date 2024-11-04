@@ -7,10 +7,11 @@ import ConsignmentForm from './pages/ConsignmentForm';
 import Consignment from './pages/Consignment';
 import WelcomeStaff from './pages/staff/welcome/WelcomeStaff';
 import WelcomeAdmin from './pages/admin/welcome/WelcomeAdmin';
-import About from './pages/About';
-import Blog from './pages/Blog';
-import ConsignmentDetail from './pages/ConsignmentDetail';
+import ProductDetail from './pages/ProductDetail';
+import Profile from './pages/Profile';
 import ConsignmentList from './pages/ConsignmentList';
+import ConsignmentDetail from './pages/ConsignmentDetail';
+import About from './pages/About';
 
 const AppRouter = () => {
   return (
@@ -22,6 +23,8 @@ const AppRouter = () => {
         <Route path="about" element={<About />} />
         <Route path="cart" element={<CartPage />} />
         <Route path="/consignment" element={<Consignment/>} />
+        <Route path="/profile" element={<Profile/>} />
+        <Route path="/product/:productID" element={<ProductDetail />} />
         <Route path="/consignment-form" element={<ConsignmentForm/>} />
         <Route path="/consignments" element={<ConsignmentList/>} />
         <Route path="/consignment/:consignmentId" element={<ConsignmentDetail />} />

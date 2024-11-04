@@ -1,3 +1,4 @@
+import { message } from "antd";
 import {
   User,
   UserData,
@@ -25,9 +26,9 @@ export const getUsers = async (
 //------------------------------ Get User Detail ------------------------------------------------
 export const getUserDetail = async (userId: string): Promise<UserData> => {
   try {
-    const response = await axiosInstance.get(`/api/users/${userId}`);
+    const response = await axiosInstance.get(`/user/${userId}`);
     const userData: UserData = response.data.data;
-
+    console.log('userData :>> ', userData);
     if (userData) {
       return userData;
     } else {
@@ -38,9 +39,23 @@ export const getUserDetail = async (userId: string): Promise<UserData> => {
     throw new Error(errorMessage);
   }
 };
-
 //-----------------------------------------------------------------------------------------------
-
+//------------------------------ Get profile User ------------------------------------------------
+export const getProfile = async (): Promise<User> => {
+  try {
+    const response = await axiosInstance.get(`/user/own`);
+    const userData: User = response.data.result;
+    if (userData) {
+      return userData;
+    } else {
+      throw new Error("User data not found");
+    }
+  } catch (error: any) {
+    const errorMessage = error.response?.data?.message || "An unknown error occurred";
+    throw new Error(errorMessage);
+  }
+};
+//-----------------------------------------------------------------------------------------------
 //--------------------------------- Delete User (Admin) -----------------------------------------
 export const deleteUser = async (userId: string): Promise<void> => {
   try {
@@ -58,6 +73,29 @@ export const deleteUser = async (userId: string): Promise<void> => {
 };
 //-----------------------------------------------------------------------------------------------
 
+//--------------------------------- ChangePassword -----------------------------------------
+export const changePassword = async (refreshToken: string, oldPassword: string, newPassword: string): Promise<any> => {
+  console.log('refreshToken :>> ', refreshToken);
+  const token = sessionStorage.getItem("token")
+  try {
+    const response =  await axiosInstance.put(`/user/change-password?token=${refreshToken}`, {
+      oldPassword,
+      newPassword,
+    }, {
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+    console.log('response :>> ', response);
+    return response.data;
+  } catch (error: any) {
+    if (error.response && error.response.data && error.response.data.message) {
+      throw new Error(error.response.data.message);
+    }
+    throw new Error(error.message);
+  }
+};
+//-----------------------------------------------------------------------------------------------
 //----------------------------------Create User (Public)-----------------------------------------
 export const createUser = async (userData: {
   name: string;
@@ -97,11 +135,15 @@ export const registerUser = async (userData: Partial<User["data"]>) => {
       '/auth/register',
       userData,
     );
-    console.log(res.data);
-    return res.data;
+    return {
+      message: (res.data as any).message,
+      statusCode: (res.data as any).statusCode,
+    };
   } catch (error: any) {
-    if (error.response && error.response.data)
+    if (error.response && error.response.data){
       throw new Error(error.response.data.message);
+    }
+    return undefined;
   }
 };
 //--------------------------------------------------------------------------------------------

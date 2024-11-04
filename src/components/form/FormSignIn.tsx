@@ -10,7 +10,7 @@ import { CheckboxChangeEvent } from "antd/es/checkbox";
 interface AuthContextType {
   user: User | null;
   isLoggedIn: boolean;
-  login: (token: string, userData: User) => void;
+  login: (token: string, userData: User,refreshToken: string) => void;
   logout: () => void;
 }
 
@@ -32,7 +32,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   // Hàm đăng nhập
-  const login = (token: string, userData: User) => {
+  const login = (token: string, userData: User,refreshToken: string) => {
+    sessionStorage.setItem('refreshToken', refreshToken);
     sessionStorage.setItem('token', token); // Lưu token vào sessionStorage
     sessionStorage.setItem('user', JSON.stringify(userData)); // Lưu user vào sessionStorage
     setIsLoggedIn(true);
@@ -42,6 +43,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Hàm đăng xuất
   const logout = () => {
     sessionStorage.removeItem('token');
+    sessionStorage.removeItem('refreshToken');
     sessionStorage.removeItem('user');
     setIsLoggedIn(false);
     setUser(null);
@@ -78,16 +80,17 @@ interface LoginUser extends User {
   email: string;
 }
 
-const handleLogin = async (values: { email: string; password: string; role: string }) => {
+const handleLogin = async (values: { email: string; password: string }) => {
   try {
     setLoading(true);
     
     // Gọi API đăng nhập
-    const response = await loginService(values.email, values.password, values.role);
-    
+    const response = await loginService(values.email, values.password);
+    console.log('response :>> ', response);
     // Kiểm tra phản hồi từ API
     if (response.isSuccess && response.result.data.accessToken) {
       const token = response.result.data.accessToken;
+      const refreshToken = response.result.data.refreshToken;
       // Create a LoginUser object with additional properties like role
       const loginUser: LoginUser = {
         ...response.result.data.user, // Assume this has User properties
@@ -96,17 +99,17 @@ const handleLogin = async (values: { email: string; password: string; role: stri
       // Extract only User properties for the context
       const { email, ...userData } = loginUser;
       
-      login(token, userData); // Lưu thông tin vào context với User properties only
+      login(token, userData,refreshToken); // Lưu thông tin vào context với User properties only
       sessionStorage.setItem("userEmail", email); // Store email separately
       
       notification.success({
         message: "Login Successful",
       });
       setLoading(false);
-      if (values.email === "giangnnt260703@gmail.com") {
+      if (values.email === "admin@gmail.com") {
         navigate("/admin");
-      } else if (values.role === "MANAGER") {
-        navigate("/staff");
+      } else if (values.email === "manager@gmail.com") {
+        navigate("/manager");
       } else {
         navigate("/");
       }

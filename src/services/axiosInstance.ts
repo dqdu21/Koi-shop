@@ -46,6 +46,7 @@ axiosInstance.interceptors.response.use(
     if (response && response.status === 401) {
       setTimeout(() => {
         sessionStorage.removeItem("token");
+        sessionStorage.removeItem('refreshToken');
         window.location.href = ROUTER_URL.SIGN_IN;
       }, 2000);
     }

@@ -21,11 +21,18 @@ const FormSignUp = () => {
     try {
       setLoading(true);
       const user = await registerUser(userData);
-      notification.success({
-        message: "Registration Successful",
-        description: "You have successfully registered!",
-      });
-      navigate("/sign-in");
+      if( user && user?.statusCode===201){
+        notification.success({
+          message: "Registration Successful",
+          description: "You have successfully registered!",
+        });
+        navigate("/sign-in");
+      }else{
+        notification.error({
+          message: user?.message,
+          description: "Registration Failed!",
+        });
+      }
     } catch (error: any) {
       notification.error({
         message: "Registration Failed",
@@ -69,6 +76,10 @@ const FormSignUp = () => {
           rules={[
             { required: true, message: "Please enter the password!" },
             { min: 6, message: "Password must be at least 6 characters!" },
+            {
+              pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
+              message: "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character!",
+            },
           ]}
         >
           <Input.Password
