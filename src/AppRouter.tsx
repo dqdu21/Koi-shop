@@ -9,6 +9,8 @@ import WelcomeStaff from './pages/staff/welcome/WelcomeStaff';
 import WelcomeAdmin from './pages/admin/welcome/WelcomeAdmin';
 import About from './pages/About';
 import Blog from './pages/Blog';
+import ConsignmentDetail from './pages/ConsignmentDetail';
+import ConsignmentList from './pages/ConsignmentList';
 
 const AppRouter = () => {
   return (
@@ -21,8 +23,9 @@ const AppRouter = () => {
         <Route path="cart" element={<CartPage />} />
         <Route path="/consignment" element={<Consignment/>} />
         <Route path="/consignment-form" element={<ConsignmentForm/>} />
-        <Route path="/blog" element={<Blog/>} />
-                    {/* Admin Routes */}
+        <Route path="/consignments" element={<ConsignmentList/>} />
+        <Route path="/consignment/:consignmentId" element={<ConsignmentDetail />} />
+        {/* Admin Routes */}
         <Route path="/admin" element={<WelcomeAdmin />} />
                     {/* Staff Routes */}
         <Route path="/staff" element={<WelcomeStaff />} />
