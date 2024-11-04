@@ -13,6 +13,7 @@ const Profile: React.FC = () => {
   const { collapsed } = useSider();
   const [dataUser,setDataUser] = useState<User | null>(null)
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [feedbackList, setFeedbackList] = useState<Feedback[]>([]);
   const fetchProfile = async () => {
     try {
       const response = await getProfile();
@@ -28,7 +29,17 @@ const Profile: React.FC = () => {
   const handleChangePassword = () => {
     setIsModalVisible(true);
   };
-
+  const fetchFeedback = async () => {
+    try {
+      const feedbackResponse = await getFeedback();
+      setFeedbackList(feedbackResponse);
+    } catch (error: any) {
+      notification.error({
+        message: "Get feedback failed",
+        description: error.message || "Failed to load feedback.",
+      });
+    }
+  };
   const handleCancel = () => {
     setIsModalVisible(false);
   };
@@ -60,6 +71,7 @@ const Profile: React.FC = () => {
   };
   useEffect(() => {
     fetchProfile();
+    fetchFeedback();
   }, []);
   console.log('dataUser?.data?.avatar :>> ', dataUser?.data?.address);
   return (
@@ -187,6 +199,20 @@ const Profile: React.FC = () => {
                   </Form.Item>
                 </Form>
               </Modal>
+              <Card title="Feedback" className="mt-6">
+                  <List
+                    itemLayout="horizontal"
+                    dataSource={feedbackList}
+                    renderItem={(item) => (
+                      <List.Item>
+                        <List.Item.Meta
+                          title={<span>{item.title}</span>}
+                          description={item.content}
+                        />
+                      </List.Item>
+                    )}
+                  />
+                </Card>
               </div>
 
             </Content>

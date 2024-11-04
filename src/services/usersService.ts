@@ -83,7 +83,8 @@ export const changePassword = async (refreshToken: string, oldPassword: string, 
       newPassword,
     }, {
       headers: {
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
       },
     });
     console.log('response :>> ', response);
