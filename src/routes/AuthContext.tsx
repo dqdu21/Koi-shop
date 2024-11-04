@@ -44,9 +44,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { User } from "../../src/models/Types"; // Đảm bảo rằng User là một interface đã định nghĩa
 import { getCurrentLogin } from "../services/authService";
+import { getCartsAPI } from "../services/cartService";
 
 interface AuthContextType {
-  user: User | null;
+  user: any;
   isLoggedIn: boolean;
   login: (token: string, userData: User) => void;
   logout: () => void;
@@ -90,10 +91,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   //Hàm get thông tin hiện tại
   const getUserCurrent = async (token:any) => {
     const res = await getCurrentLogin(token);
-    setUser(res);
+    const response = await getCartsAPI()
+    const cart = response.result.data[0]
+    // const userData = {cart}
+    const userData = {cartId: cart.id, ...res}
+    setUser(userData);
 
-    console.log(res);
+    console.log(userData);
   }
+
   return (
     <AuthContext.Provider value={{ user, isLoggedIn, login, logout,getUserCurrent }}>
       {children}

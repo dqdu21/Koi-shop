@@ -42,7 +42,7 @@ const CartPage: React.FC = () => {
           notification.info({ message: 'Info', description: 'No cart found.' });
         }
       } catch (error: any) {
-       
+
       } finally {
         setLoading(false);
       }
@@ -108,18 +108,19 @@ const CartPage: React.FC = () => {
       ) : (
         <>
                   <div className="mb-6">
-                    {cartItems.map((item) => (
-                      <CartItem
+
+                      <div className='grid grid-cols-[2fr_1fr] gap-4'>
+                        <div className="">
+                        {cartItems.map((item) => ( <CartItem
                         key={item.id}
                         item={item}
                         onRemove={handleRemove} // Ensure you implement this
                         isSelected={selectedItems.has(item.id)} // Ensure selectedItems is defined
                         onSelect={handleSelect} // Ensure you implement this
-                      />
-                    ))}
-                  </div>
+                      />  ))}
+                        </div>
 
-                  <CartSummary
+                      <CartSummary
                     price_paid={pricePaid}
                     price={price}
                     discount={discount}
@@ -128,6 +129,11 @@ const CartPage: React.FC = () => {
                     onRemove={handleRemove} // Ensure you implement this
                     onSelect={handleSelect} // Ensure you implement this
                   />
+                      </div>
+
+                  </div>
+
+
                 </>
               )}
             </div>

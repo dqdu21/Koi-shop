@@ -69,3 +69,9 @@ body {
     @apply w-full bg-stone-800;
   }
 }
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+}

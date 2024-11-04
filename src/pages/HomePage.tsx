@@ -14,6 +14,7 @@ import { axiosInstance } from "../services/axiosInstance";
 import { useEffect, useState } from "react";
 import Information from "./Information";
 import { addToCartAPI } from "../services/cartService";
+import { useAuth } from "../routes/AuthContext";
 
 interface Product {
   id: string;
@@ -54,7 +55,7 @@ const HomePage: React.FC = () => {
 
   const { collapsed } = useSider();
   const [categories, setCategories] = useState<Category[]>([]);
-
+  const { user} = useAuth()
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -72,11 +73,12 @@ const HomePage: React.FC = () => {
 
   const handleAddToCart = async (product: Product) => {
     try {
-      const cartId = "37ab9331-f39a-4072-80ad-4adc3684fcec"; // Use the actual cart ID
+      const cartId = user?.cartId; // Use the actual cart ID
       const response = await axiosInstance.post(
         `https://koifarmshop.online/api/cart/${cartId}/product/add`,
         {
           productId: product.id, // Adjust based on API requirements
+          quantity: 1,
         },
         {
           headers: {

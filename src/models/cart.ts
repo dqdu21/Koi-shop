@@ -5,9 +5,11 @@ export interface CartItem {
     productId: string; // Assuming each item has a product ID
     totalPrice: number; // Assuming the cart item has a total price
     discount?: number;
+    quantity: number;
+    product: any;
     // Add other properties as necessary based on your API response
   }
-  
+
   export interface CartResponse {
     statusCode: number;
     message: string;
@@ -27,7 +29,7 @@ export interface CartItem {
       }[];
     };
   }
-  
+
   export interface CartData {
     id: string;
     totalPrice: number;
@@ -36,4 +38,3 @@ export interface CartItem {
     cartItems: CartItem[];
     // Other fields as necessary
   }
-  

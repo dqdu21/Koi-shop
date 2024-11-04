@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { CartItem } from '../../models/cart';
+import { Card } from '@/components/ui/card';
 
 interface CartSummaryProps {
   price_paid: number;
