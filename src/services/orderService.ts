@@ -1,20 +1,23 @@
 import { axiosInstance } from './axiosInstance';
-
+import { getAddressOwn } from './addressService';
 
 export const payOrder = async (cartId: string) => {
   try {
+     const res = await getAddressOwn()
+     const addressId = res.result.data[0].id;
+     console.log(res,addressId)
     await axiosInstance.post(`/order/cart/${cartId}`, {
-      addressId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      serviceId: 0,
-      serviceTypeId: 0,
+      addressId: "00000000-0000-0000-0000-000000000001",
+      serviceId: 53321,
+      serviceTypeId: 2,
       totalWeight: 0,
       contactNumber: "123456789",
       contactName: "Customer",
-      discountCode: "",
+      // discountCode: "",
       paymentMethod: "VNPAY",
       note: "",
       currency: "",
-      usePoint: true
+      usePoint: false
     }
     )
   }

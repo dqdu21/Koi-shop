@@ -12,6 +12,7 @@ import AppSider from '../components/layout/AppSider';
 import { useSider } from '../app/context/SiderProvider';
 import { useAuth } from "../routes/AuthContext";
 import { payOrder } from '@/services/orderService';
+import { getAddressOwn } from '@/services/addressService';
 
 const CartPage: React.FC = () => {
   const [cartItems, setCartItems] = useState<CartItemType[]>([]);
@@ -87,6 +88,7 @@ const CartPage: React.FC = () => {
   }
 
   const handlePay = async ()  => {
+
     await payOrder(user.cartId)
     fetchCartItems()
   }
