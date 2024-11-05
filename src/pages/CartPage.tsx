@@ -73,7 +73,7 @@ const CartPage: React.FC = () => {
     let totalDiscount = 0;
 
     cartItems.forEach((item) => {
-      totalPrice += item.totalPrice; // Adjust based on your item structure
+      totalPrice = item.product.price*item.quantity + totalPrice; // Adjust based on your item structure
       // Assuming each cart item has a discount property
       totalDiscount += item.discount || 0;
     });
