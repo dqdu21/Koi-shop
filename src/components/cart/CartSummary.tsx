@@ -13,6 +13,7 @@ interface CartSummaryProps {
   selectedItems: Set<string>;
 
   onSelect: (id: string, selected: boolean) => void;
+  onPay: () => void
 }
 
 const CartSummary: React.FC<CartSummaryProps> = ({
@@ -23,16 +24,17 @@ const CartSummary: React.FC<CartSummaryProps> = ({
   selectedItems,
 
   onSelect,
+  onPay,
 }) => {
   return (
-    <Card className='p-4 h-max'>
+    <Card className='p-4 h-max my-2'>
     <div className='space-y-4'>
       <h2 className='font-semibold'>Cart Summary</h2>
       <div className='flex justify-between'><div>Total Price:</div> <div>{price.toLocaleString('vi-vn')}</div></div>
       <div className='flex justify-between'><div>Total Discount:</div> <div>{discount}</div></div>
       <div className="h-px w-full bg-gray-500"></div>
       <div className='flex justify-between'><div>Price Paid:</div> <div className='font-bold'>{price_paid.toLocaleString('vi-vn')}</div></div>
-      <Button className='w-full bg-red-400 text-white'>Thanh toán</Button>
+      <Button className='w-full bg-red-400 text-white' onClick={() => onPay()}>Thanh toán</Button>
       {/* Additional summary information can be displayed here */}
     </div>
     </Card>

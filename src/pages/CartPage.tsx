@@ -11,6 +11,7 @@ import { Content, Footer, Header } from 'antd/es/layout/layout';
 import AppSider from '../components/layout/AppSider';
 import { useSider } from '../app/context/SiderProvider';
 import { useAuth } from "../routes/AuthContext";
+import { payOrder } from '@/services/orderService';
 
 const CartPage: React.FC = () => {
   const [cartItems, setCartItems] = useState<CartItemType[]>([]);
@@ -84,6 +85,11 @@ const CartPage: React.FC = () => {
       await removeProductFromCart(user.cartId,productId,quantity);
       fetchCartItems()
   }
+
+  const handlePay = async ()  => {
+    await payOrder(user.cartId)
+    fetchCartItems()
+  }
   return (
     <Layout className="h-screen w-screen flex flex-col">
       <Header className="header">
@@ -129,6 +135,7 @@ const CartPage: React.FC = () => {
                     selectedItems={selectedItems} // Ensure selectedItems is defined
                      // Ensure you implement this
                     onSelect={handleSelect} // Ensure you implement this
+                    onPay={() => handlePay()}
                   />
                       </div>
 
