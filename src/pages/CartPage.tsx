@@ -4,7 +4,7 @@ import CartItem from '../components/cart/CartItem';
 import CartSummary from '../components/cart/CartSummary';
 import AppHeader from '../components/layout/AppHeader';
 import AppFooter from '../components/layout/AppFooter';
-import { getCartsAPI } from '../services/cartService';
+import { getCartsAPI, removeProductFromCart } from '../services/cartService';
 import { CartData, CartItem as CartItemType } from '../models/cart'; // Import the types
 import Sider from 'antd/es/layout/Sider';
 import { Content, Footer, Header } from 'antd/es/layout/layout';
@@ -21,40 +21,37 @@ const CartPage: React.FC = () => {
   const { collapsed } = useSider();
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
   const { isLoggedIn } = useAuth();
-
+  const { user} = useAuth()
   useEffect(() => {
     if (isLoggedIn) {
       setLoading(true);
     }
   }, [isLoggedIn]);
+  const fetchCartItems = async () => {
+    setLoading(true);
+    try {
+      const response = await getCartsAPI();
+
+      if (response.isSuccess && response.result.data.length > 0) {
+        const cart = response.result.data[0]; // Get the first cart
+        setCartItems(cart.cartItems); // Get cart items from the response
+        calculateCartSummary(cart.cartItems);
+      } else {
+        notification.info({ message: 'Info', description: 'No cart found.' });
+      }
+    } catch (error: any) {
+
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchCartItems = async () => {
-      setLoading(true);
-      try {
-        const response = await getCartsAPI();
-
-        if (response.isSuccess && response.result.data.length > 0) {
-          const cart = response.result.data[0]; // Get the first cart
-          setCartItems(cart.cartItems); // Get cart items from the response
-          calculateCartSummary(cart.cartItems);
-        } else {
-          notification.info({ message: 'Info', description: 'No cart found.' });
-        }
-      } catch (error: any) {
-
-      } finally {
-        setLoading(false);
-      }
-    };
 
     fetchCartItems();
   }, []);
 
-  const handleRemove = (id: string) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
-    // Add any additional logic for removing items from the server if necessary
-  };
+
 
   const handleSelect = (id: string, selected: boolean) => {
     setSelectedItems((prev) => {
@@ -83,6 +80,10 @@ const CartPage: React.FC = () => {
     setPricePaid(totalPrice - totalDiscount);
   };
 
+  const removeItem = async (productId: string, quantity: number) => {
+      await removeProductFromCart(user.cartId,productId,quantity);
+      fetchCartItems()
+  }
   return (
     <Layout className="h-screen w-screen flex flex-col">
       <Header className="header">
@@ -114,7 +115,7 @@ const CartPage: React.FC = () => {
                         {cartItems.map((item) => ( <CartItem
                         key={item.id}
                         item={item}
-                        onRemove={handleRemove} // Ensure you implement this
+                        onRemove={removeItem} // Ensure you implement this
                         isSelected={selectedItems.has(item.id)} // Ensure selectedItems is defined
                         onSelect={handleSelect} // Ensure you implement this
                       />  ))}
@@ -126,7 +127,7 @@ const CartPage: React.FC = () => {
                     discount={discount}
                     cartItems={cartItems} // Ensure CartSummary can handle this prop
                     selectedItems={selectedItems} // Ensure selectedItems is defined
-                    onRemove={handleRemove} // Ensure you implement this
+                     // Ensure you implement this
                     onSelect={handleSelect} // Ensure you implement this
                   />
                       </div>

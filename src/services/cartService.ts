@@ -14,7 +14,6 @@ export const addToCartAPI = async (cartId: string, productId: string) => {
 }
 
 
-
 export const createCartAPI = async (cartData: Partial<CartData>) => {
   try {
     const res = await axiosInstance.post('/cart/create', cartData);
@@ -25,7 +24,7 @@ export const createCartAPI = async (cartData: Partial<CartData>) => {
 };
 
 export const editStatusCartsAPI = async (
-  cartId: string, 
+  cartId: string,
   status: string,
   cartItems: { _id: string; cart_no: string }[]
 ): Promise<void> => {
@@ -45,11 +44,22 @@ export const deleteCartAPI = async (cartId: string): Promise<void> => {
     await axiosInstance.delete(`/cart/delete/${cartId}`);
   } catch (error: any) {
     if (error?.response?.data?.message) {
-      console.error('Error in deleteCartAPI: ', error);  
+      console.error('Error in deleteCartAPI: ', error);
       throw new Error(error.response.data.message);
     }
-    console.error('Error in deleteCartAPI: ', error); 
+    console.error('Error in deleteCartAPI: ', error);
     throw new Error(error.message);
   }
 };
 
+
+export const removeProductFromCart = async (cartId: string, productId: string, quantity: number): Promise<void> => {
+  try {
+    await axiosInstance.post(`/cart/${cartId}/product/remove`, {
+      productId: productId,
+      quantity: quantity
+    });
+  } catch (error: any) {
+    console.error(error.message)
+  }
+}

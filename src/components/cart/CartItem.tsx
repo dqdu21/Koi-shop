@@ -12,7 +12,7 @@ import { Trash } from 'lucide-react';
 
 interface CartItemProps {
   item: CartItemType;
-  onRemove: (id: string) => void;
+  onRemove: (productId: string, quantity: number) => void;
   isSelected: boolean;
   onSelect: (id: string, selected: boolean) => void; // Updated to accept selected state
 }
@@ -21,6 +21,7 @@ const CartItem: React.FC<CartItemProps> = ({ item, onRemove, isSelected, onSelec
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onSelect(item.id, event.target.checked);
   };
+
 
   return (
 
@@ -40,7 +41,7 @@ const CartItem: React.FC<CartItemProps> = ({ item, onRemove, isSelected, onSelec
       <p>Quantity: {item.quantity}</p>
       <p>Total: {(item.product.price*item.quantity).toLocaleString('vi-vn')}</p>
       </div>
-      <div className="flex justify-end items-center cursor-pointer">
+      <div className="flex justify-end items-center cursor-pointer" onClick={() => onRemove(item.productId, item.quantity)}>
         <Trash />
       </div>
 

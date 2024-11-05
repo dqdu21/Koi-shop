@@ -11,7 +11,7 @@ interface CartSummaryProps {
   discount: number;
   cartItems: CartItem[];
   selectedItems: Set<string>;
-  onRemove: (id: string) => void;
+
   onSelect: (id: string, selected: boolean) => void;
 }
 
@@ -21,7 +21,7 @@ const CartSummary: React.FC<CartSummaryProps> = ({
   discount,
   cartItems,
   selectedItems,
-  onRemove,
+
   onSelect,
 }) => {
   return (
