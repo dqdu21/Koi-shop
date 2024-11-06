@@ -9,6 +9,7 @@ import WelcomeStaff from './pages/staff/welcome/WelcomeStaff';
 import WelcomeAdmin from './pages/admin/welcome/WelcomeAdmin';
 import ProductDetail from './pages/ProductDetail';
 import Profile from './pages/Profile';
+import Product from './pages/admin/product/product';
 
 const AppRouter = () => {
   return (
@@ -24,6 +25,7 @@ const AppRouter = () => {
         <Route path="/consignment-form" element={<ConsignmentForm/>} />
                     {/* Admin Routes */}
         <Route path="/admin" element={<WelcomeAdmin />} />
+        <Route path='/product-manage' element={<Product />} />
                     {/* Staff Routes */}
         <Route path="/staff" element={<WelcomeStaff />} />
       </Routes>

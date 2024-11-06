@@ -13,7 +13,7 @@ import slider_3 from "../assets/Images/slider3.png";
 import { axiosInstance } from "../services/axiosInstance";
 import { useEffect, useState } from "react";
 import Information from "./Information";
-import { addToCartAPI } from "../services/cartService";
+import { addToCartAPI, createCartAPI } from "../services/cartService";
 import { useAuth } from "../routes/AuthContext";
 
 interface Product {
@@ -73,8 +73,14 @@ const HomePage: React.FC = () => {
 
   const handleAddToCart = async (product: Product) => {
     try {
-      const cartId = user?.cartId; // Use the actual cart ID
-      const response = await axiosInstance.post(
+      const cartId =  user.cartId ; // Use the actual cart ID
+      if (!cartId) {
+        await createCartAPI({
+          currency: "",
+          status: 1
+        })
+      }
+       const response = await axiosInstance.post(
         `https://koifarmshop.online/api/cart/${cartId}/product/add`,
         {
           productId: product.id, // Adjust based on API requirements

@@ -14,9 +14,9 @@ export const addToCartAPI = async (cartId: string, productId: string) => {
 }
 
 
-export const createCartAPI = async (cartData: Partial<CartData>) => {
+export const createCartAPI = async (cartData: any) => {
   try {
-    const res = await axiosInstance.post('/cart/create', cartData);
+    const res = await axiosInstance.post('/cart', cartData);
     return res.data;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || error.message);

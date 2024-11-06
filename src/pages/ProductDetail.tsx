@@ -14,6 +14,8 @@ import AppSider from "../components/layout/AppSider";
 import { Content, Footer, Header } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
 import { useSider } from "../app/context/SiderProvider";
+import { createCartAPI } from "@/services/cartService";
+import { useAuth } from "../routes/AuthContext";
 
 interface Product {
   id: string;
@@ -46,6 +48,7 @@ const ProductDetail: React.FC = () => {
   const [quantity, setQuantity] = useState(1);
   const { collapsed } = useSider();
   const [credential, setCredential] = useState<Credential | null>(null);
+  const { user } = useAuth()
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -81,11 +84,40 @@ const ProductDetail: React.FC = () => {
     }
   };
 
-  const handleAddToCart = () => {
-    notification.success({
-      message: "Added to Cart",
-      description: `${product?.name} (${quantity}) added to your cart.`,
-    });
+
+  const handleAddToCart = async () => {
+    try {
+      const cartId = user.cartId ; // Use the actual cart ID
+      if (!cartId) {
+        await createCartAPI({
+          currency: "",
+          status: 1
+        })
+      }
+       const response = await axiosInstance.post(
+        `https://koifarmshop.online/api/cart/${cartId}/product/add`,
+        {
+          productId: product?.id, // Adjust based on API requirements
+          quantity: quantity,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json", // Ensure proper content type
+          },
+        }
+      );
+      notification.success({
+        message: "Success",
+        description: "Product added to cart.",
+      });
+    } catch (error) {
+      // Log the full error object to the console for debugging
+      console.error("Error adding to cart:", error);
+      notification.error({
+        message: "Error",
+        description: "Could not add product to cart.",
+      });
+    }
   };
 
   if (!product)

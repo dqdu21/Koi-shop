@@ -48,6 +48,7 @@ export type User = {
       payout_amount: string;
       created_at: string;
     };
+    cartId?: string;
   };
 };
 
