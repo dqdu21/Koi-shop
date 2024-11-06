@@ -7,7 +7,7 @@ export const payOrder = async (cartId: string) => {
     //  console.log(res);
     //  const addressId = res.result.data[0].id;
     //  console.log(res)
-    await axiosInstance.post(`/order/cart/${cartId}`, {
+    const res = await axiosInstance.post(`/order/cart/${cartId}`, {
       addressId: "00000000-0000-0000-0000-000000000001",
       serviceId: 53321,
       serviceTypeId: 2,
@@ -21,6 +21,7 @@ export const payOrder = async (cartId: string) => {
       usePoint: false
     }
     )
+    return res.data;
   }
   catch (err: any) {
     console.error(err.message);

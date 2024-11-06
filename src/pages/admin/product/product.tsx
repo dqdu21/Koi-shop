@@ -34,6 +34,7 @@ interface Product {
 }
 
 export default function Product() {
+  const [isOpen, setIsOpen] = useState(false);
   const [products,setProducts] = useState<Product[]>([])
   const fetchProduct = async () => {
     const res = await GetAllProduct()
@@ -42,7 +43,10 @@ export default function Product() {
   useEffect(() => {
     fetchProduct()
   }, [])
-
+  const handleAdd = () => {
+    setIsOpen(false)
+    fetchProduct()
+  }
   return (
     <Layout className="h-screen">
       <AdminSidebar />
@@ -52,7 +56,7 @@ export default function Product() {
           <div className="bg-white p-5 rounded-lg shadow-md text-center">
 
             <div className="flex justify-end py-4">
-            <Dialog>
+            <Dialog open={isOpen} onOpenChange={setIsOpen}>
   <DialogTrigger>
   <Button className="rounded-full bg-green-500 text-white flex">
               <Plus />
@@ -66,7 +70,7 @@ export default function Product() {
 
 
     </DialogHeader>
-    <KoiFishForm />
+    <KoiFishForm handleSubmit={handleAdd}/>
   </DialogContent>
 </Dialog>
 

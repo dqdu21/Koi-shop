@@ -16,3 +16,15 @@ export const GetAllProduct = async () => {
 
 
 }
+
+export const addProduct = async (data: any) => {
+  try {
+    const res = await axiosInstance.post("/product",
+      data
+    )
+    return res.data
+
+  } catch (err: any) {
+    console.error(err)
+  }
+}

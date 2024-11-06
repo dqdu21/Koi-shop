@@ -89,7 +89,8 @@ const CartPage: React.FC = () => {
 
   const handlePay = async ()  => {
 
-    await payOrder(user.cartId)
+    const res = await payOrder(user.cartId);
+    window.location.href = res.result.data.paymentUrl
     fetchCartItems()
   }
   return (

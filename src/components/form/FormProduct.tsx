@@ -7,19 +7,33 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Textarea} from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button";
-
+import { addProduct } from "@/services/productService";
+import { useEffect, useState } from "react";
+import { getAllCategory } from "@/services/categoryService";
 // Define the form values based on the schema
 type KoiFishFormValues = z.infer<typeof productSchema>;
 
-const KoiFishForm = () => {
+
+const KoiFishForm = ({handleSubmit} : {handleSubmit: () => void}) => {
   const form = useForm<KoiFishFormValues>({
     resolver: zodResolver(productSchema),
   });
 
-  const onSubmit = (data: KoiFishFormValues) => {
+  const onSubmit = async (data: KoiFishFormValues) => {
     console.log('Test');
     console.log("Form submitted:", data);
+    await addProduct(data);
+    handleSubmit()
+
   };
+  const [catgories,setCatgories] = useState([])
+  const fetchCategories = async () => {
+    const res = await getAllCategory()
+    setCatgories(res.result.data);
+  }
+  useEffect(() => {
+    fetchCategories()
+  },[])
 
   return (
     <Form {...form}>
@@ -149,7 +163,8 @@ const KoiFishForm = () => {
         <FormItem>
   <FormLabel>Gender</FormLabel>
   <FormControl>
-  <select
+<div className="">
+<select
       {...form.register("gender", { valueAsNumber: true })}
       defaultValue=""
       className="w-[180px] border border-gray-300 rounded p-2"
@@ -158,6 +173,8 @@ const KoiFishForm = () => {
       <option value={0}>Female</option>
       <option value={1}>Male</option>
     </select>
+</div>
+
   </FormControl>
   {/* <FormMessage>{form.formState.errors.gender?.message}</FormMessage> */}
 </FormItem>
@@ -179,13 +196,23 @@ const KoiFishForm = () => {
         <FormItem>
           <FormLabel>Category ID</FormLabel>
           <FormControl>
-            <Input {...form.register("categoryId")} placeholder="3d4fc185-049d-4a96-851b-1d320e7dbba8" />
+            <div className="">
+            <select className="w-[180px] border border-gray-300 rounded p-2">
+                {catgories.map((category: any) => (
+                  <option value={category.id} className="">{category.name}</option>
+                ))}
+              </select>
+            </div>
+
           </FormControl>
           <FormMessage>{form.formState.errors.categoryId?.message}</FormMessage>
         </FormItem>
 
         {/* Submit Button */}
-        <Button type="submit">Submit</Button>
+        <div className="flex justify-center">
+        <Button type="submit" className="bg-green-600 text-white">Submit</Button>
+        </div>
+
       </form>
     </Form>
   );
