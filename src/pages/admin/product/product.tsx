@@ -113,7 +113,7 @@ export default function Product() {
                 <TableCell className="flex justify-center gap-4">
                   <Trash className="cursor-pointer" onClick={() => handleDelete(product.id)}/>
                   <Pen className="cursor-pointer" onClick={() => {
-                    setProductSelected(product)
+                    setProductSelected({...product, gender: product.gender == "Male" ? 1 : 0})
                     setIsOpenUpdate(true)
                     }}/>
 
