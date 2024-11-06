@@ -25,7 +25,7 @@ const AppRouter = () => {
         <Route path="/consignment-form" element={<ConsignmentForm/>} />
                     {/* Admin Routes */}
         <Route path="/admin" element={<WelcomeAdmin />} />
-        <Route path='/product-manage' element={<Product />} />
+        <Route path='/admin/product-manage' element={<Product />} />
                     {/* Staff Routes */}
         <Route path="/staff" element={<WelcomeStaff />} />
       </Routes>

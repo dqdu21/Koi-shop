@@ -7,14 +7,13 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Textarea} from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button";
-import { addProduct } from "@/services/productService";
 import { useEffect, useState } from "react";
 import { getAllCategory } from "@/services/categoryService";
 // Define the form values based on the schema
 type KoiFishFormValues = z.infer<typeof productSchema>;
 
 
-const KoiFishForm = ({handleSubmit} : {handleSubmit: () => void}) => {
+const KoiFishForm = ({handleSubmit, initialData} : {handleSubmit: (data:any) => void, initialData?: any}) => {
   const form = useForm<KoiFishFormValues>({
     resolver: zodResolver(productSchema),
   });
@@ -22,8 +21,7 @@ const KoiFishForm = ({handleSubmit} : {handleSubmit: () => void}) => {
   const onSubmit = async (data: KoiFishFormValues) => {
     console.log('Test');
     console.log("Form submitted:", data);
-    await addProduct(data);
-    handleSubmit()
+    handleSubmit(data)
 
   };
   const [catgories,setCatgories] = useState([])
@@ -34,6 +32,11 @@ const KoiFishForm = ({handleSubmit} : {handleSubmit: () => void}) => {
   useEffect(() => {
     fetchCategories()
   },[])
+
+  useEffect(() => {
+    console.log(initialData);
+    form.reset(initialData);
+  }, [initialData, form]);
 
   return (
     <Form {...form}>

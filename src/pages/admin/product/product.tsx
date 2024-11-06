@@ -1,11 +1,13 @@
 import { Layout, Typography } from "antd";
 import AdminHeader from "../header/AdminHeader";
 import AdminSidebar from "../siderbar/AdminSiderbar";
-import { GetAllProduct } from "@/services/productService";
+import { GetAllProduct, deleteProduct } from "@/services/productService";
 import { useEffect, useState } from "react";
 import { Trash, Plus, Pen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import KoiFishForm from "@/components/form/FormProduct";
+import { addProduct, updateProduct } from "@/services/productService";
+
 const { Content } = Layout;
 import {
   Table,
@@ -25,7 +27,7 @@ import {
 } from "@/components/ui/dialog"
 
 interface Product {
-  id: number | string
+  id:  string
   name: string
   description: string
   weight: number
@@ -35,7 +37,9 @@ interface Product {
 
 export default function Product() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenUpdate,setIsOpenUpdate] = useState(false)
   const [products,setProducts] = useState<Product[]>([])
+  const [productSelected,setProductSelected] = useState<any>()
   const fetchProduct = async () => {
     const res = await GetAllProduct()
     setProducts(res.result.data);
@@ -43,8 +47,18 @@ export default function Product() {
   useEffect(() => {
     fetchProduct()
   }, [])
-  const handleAdd = () => {
+  const handleAdd = async (data:any) => {
+    await addProduct(data);
     setIsOpen(false)
+    fetchProduct()
+  }
+  const handleUpdate = async (data: any) => {
+    await updateProduct(productSelected.id,data)
+    setIsOpenUpdate(false);
+    fetchProduct()
+  }
+  const handleDelete = async (id: string) => {
+    await deleteProduct(id);
     fetchProduct()
   }
   return (
@@ -97,8 +111,12 @@ export default function Product() {
                 <TableCell className="text-left">{product.description}</TableCell>
                 <TableCell className="text-left">{product.price}</TableCell>
                 <TableCell className="flex justify-center gap-4">
-                  <Trash className="cursor-pointer"/>
-                  <Pen className="cursor-pointer" />
+                  <Trash className="cursor-pointer" onClick={() => handleDelete(product.id)}/>
+                  <Pen className="cursor-pointer" onClick={() => {
+                    setProductSelected(product)
+                    setIsOpenUpdate(true)
+                    }}/>
+
                 </TableCell>
               </TableRow>
                 )
@@ -106,7 +124,18 @@ export default function Product() {
 
             </TableBody>
           </Table>
+          <Dialog open={isOpenUpdate} onOpenChange={setIsOpenUpdate}>
 
+  <DialogContent className="bg-white">
+    <DialogHeader>
+      <DialogTitle>Chỉnh sửa sản phẩm</DialogTitle>
+
+
+
+    </DialogHeader>
+    <KoiFishForm handleSubmit={handleUpdate} initialData={productSelected}/>
+  </DialogContent>
+</Dialog>
           </div>
         </Content>
       </Layout>

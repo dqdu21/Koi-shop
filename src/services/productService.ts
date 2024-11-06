@@ -28,3 +28,26 @@ export const addProduct = async (data: any) => {
     console.error(err)
   }
 }
+
+export const deleteProduct = async (id:string) => {
+  try {
+    const res = await axiosInstance.delete(`/product/${id}`
+    )
+    return res.data
+
+  } catch (err: any) {
+    console.error(err)
+  }
+}
+
+export const updateProduct = async (productId: string, data: any) => {
+  try {
+    const res = await axiosInstance.put(`/product/${productId}`,
+      data
+    )
+    return res.data
+
+  } catch (err: any) {
+    console.error(err)
+  }
+}

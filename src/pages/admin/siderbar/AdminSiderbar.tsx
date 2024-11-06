@@ -3,6 +3,7 @@ import {
   SettingOutlined,
   ShoppingOutlined,
   UserOutlined,
+  ProductFilled
 } from "@ant-design/icons";
 import { ContrastOutlined, HomeMiniOutlined } from "@mui/icons-material";
 import { Layout, Menu } from "antd";
@@ -28,6 +29,9 @@ const AdminSidebar = () => {
         </Menu.Item>
         <Menu.Item key="users" icon={<UserOutlined />}>
           <Link to="/admin/users">Quản lý người dùng</Link>
+        </Menu.Item>
+        <Menu.Item key="product" icon={<ProductFilled />}>
+          <Link to="/admin/product-manage">Quản lý sản phẩm</Link>
         </Menu.Item>
         <Menu.Item key="consign" icon={<ContrastOutlined />}>
           <Link to="/admin/manage-consign">Quản lý ký gửi</Link>
