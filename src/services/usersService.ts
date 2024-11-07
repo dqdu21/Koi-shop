@@ -23,11 +23,30 @@ export const getUsers = async (
   }
 };
 //-----------------------------------------------------------------------------------------------
-//--------------------------------- Get fee ------------------------------------------
+//--------------------------------- Get feedback ------------------------------------------
 export const getFeedback= async (id :string): Promise<Feedback> => {
   try {
     const response = await axiosInstance.get(`/feedback/user/${id}`)
     return response.data;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};
+//-----------------------------------------------------------------------------------------------
+//--------------------------------- put feedback ------------------------------------------
+export const putFeedback= async (id :string): Promise<Feedback> => {
+  try {
+    const response = await axiosInstance.put(`/feedback/user/${id}`)
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};
+//-----------------------------------------------------------------------------------------------
+//--------------------------------- delete feedback ------------------------------------------
+export const deleteFeedback= async (id :string): Promise<void> => {
+  try {
+    await axiosInstance.delete(`/feedback/${id}`)
   } catch (error: any) {
     throw new Error(error.message);
   }

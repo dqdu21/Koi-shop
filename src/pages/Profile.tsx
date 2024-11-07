@@ -6,7 +6,7 @@ import AppHeader from '../components/layout/AppHeader';
 import AppFooter from '../components/layout/AppFooter';
 import AppSider from '../components/layout/AppSider';
 import { useSider } from '../app/context/SiderProvider';
-import { changePassword, getFeedback, getProfile } from '../services/usersService';
+import { changePassword, deleteFeedback, getFeedback, getProfile } from '../services/usersService';
 import {  User } from '../models/Types';
 const { Title } = Typography;
 interface FeedbackData {
@@ -22,6 +22,7 @@ interface FeedbackData {
 const Profile: React.FC = () => {
   const { collapsed } = useSider();
   const [dataUser,setDataUser] = useState<User | null>(null)
+  const [reload,setReload] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalVisible1, setIsModalVisible1] = useState(false);
   const [feedbackList, setFeedbackList] = useState<FeedbackData[]>([]);
@@ -92,9 +93,13 @@ const Profile: React.FC = () => {
       okText: 'Yes, Delete',
       okType: 'danger',
       cancelText: 'Cancel',
-      onOk: () => {
-        // Xóa feedback khỏi danh sách khi người dùng xác nhận
-        setFeedbackList(feedbackList.filter(feedback => feedback.id !== id));
+      onOk: async() => {
+        await deleteFeedback(id)
+        setReload(!reload)
+        notification.success({
+          message: "Delete feedback success",
+          description: "Delete feedback success",
+        })
       },
     });
   };
@@ -126,7 +131,7 @@ const Profile: React.FC = () => {
   };
   useEffect(() => {
       fetchProfile();
-  }, []);
+  }, [reload]);
   console.log('dataUser?.data?.avatar :>> ', dataUser?.data?.address);
   return (
     <div className="flex">
