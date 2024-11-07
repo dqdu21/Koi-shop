@@ -23,7 +23,7 @@ export type Address = {
 // User
 export type User = {
   data: {
-    _id: string;
+    id: string;
     email: string;
     google_id: string;
     password: string;
@@ -53,7 +53,19 @@ export type User = {
 };
 
 
-
+export type Feedback = {
+  result:{
+    data:{
+      id: string;
+      description: string;
+      rating: number;
+      productId: string;
+      userId: string;
+      product: string;
+      user: string;
+    }
+  }
+}
 
 export type SearchCondition = {
   keyword?: string;

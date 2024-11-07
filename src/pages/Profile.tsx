@@ -1,23 +1,39 @@
 import React, { useEffect, useState } from 'react';
-import { Layout, Typography, Card, Avatar, Descriptions, notification, Button, Modal, Form, Input } from 'antd';
+import { Layout, Typography, Card, Avatar, Descriptions, notification, Button, Modal, Form, Input, List, Rate } from 'antd';
 import Sider from 'antd/es/layout/Sider';
 import { Content, Footer, Header } from 'antd/es/layout/layout';
 import AppHeader from '../components/layout/AppHeader';
 import AppFooter from '../components/layout/AppFooter';
 import AppSider from '../components/layout/AppSider';
 import { useSider } from '../app/context/SiderProvider';
-import { changePassword, getProfile } from '../services/usersService';
-import { User } from '../models/Types';
+import { changePassword, getFeedback, getProfile } from '../services/usersService';
+import {  User } from '../models/Types';
 const { Title } = Typography;
+interface FeedbackData {
+  id: string;
+  description: string;
+  rating: number;
+  productId: string;
+  userId: string;
+  product: string;
+  user: string;
+}
+
 const Profile: React.FC = () => {
   const { collapsed } = useSider();
   const [dataUser,setDataUser] = useState<User | null>(null)
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [feedbackList, setFeedbackList] = useState<Feedback[]>([]);
+  const [isModalVisible1, setIsModalVisible1] = useState(false);
+  const [feedbackList, setFeedbackList] = useState<FeedbackData[]>([]);
+  const [currentFeedback, setCurrentFeedback] = useState<FeedbackData | null>(null);
+  const [description, setDescription] = useState('');  // Trường mô tả
+  const [rating, setRating] = useState(0);
+  console.log('feedbackList :>> ', feedbackList);
   const fetchProfile = async () => {
     try {
       const response = await getProfile();
-      console.log('response :>> ', response);
+      const id = response?.data?.id;
+      fetchFeedback(id);
       setDataUser(response)
     } catch (error: any) {
       notification.error({
@@ -26,13 +42,39 @@ const Profile: React.FC = () => {
       });
     }
   };
+  const handleSaveEdit = () => {
+    if (currentFeedback) {
+      const updatedFeedback = { ...currentFeedback, description, rating };
+      const updatedList = feedbackList.map(feedback =>
+        feedback.id === updatedFeedback.id ? updatedFeedback : feedback
+      );
+      setFeedbackList(updatedList);  // Cập nhật lại danh sách feedback
+      setIsModalVisible(false);  // Đóng modal sau khi lưu
+    }
+  };
+  const handleEdit = (id: string) => {
+    const feedbackToEdit = feedbackList.find(feedback => feedback.id === id);
+    if (feedbackToEdit) {
+      setCurrentFeedback(feedbackToEdit);
+      setDescription(feedbackToEdit.description);
+      setRating(feedbackToEdit.rating);
+      setIsModalVisible1(true);  // Hiển thị modal khi click Edit
+    }
+  };
+  const handleCancelEdit = () => {
+    setIsModalVisible1(false);
+  };
   const handleChangePassword = () => {
     setIsModalVisible(true);
   };
-  const fetchFeedback = async () => {
+  const fetchFeedback = async (id: string) => {
     try {
-      const feedbackResponse = await getFeedback();
-      setFeedbackList(feedbackResponse);
+      const feedbackResponse = await getFeedback(id);
+      if (Array.isArray(feedbackResponse?.result?.data)) {
+        setFeedbackList(feedbackResponse.result.data); 
+      } else {
+        console.error('Dữ liệu phản hồi không phải là một mảng hợp lệ');
+      }
     } catch (error: any) {
       notification.error({
         message: "Get feedback failed",
@@ -42,6 +84,19 @@ const Profile: React.FC = () => {
   };
   const handleCancel = () => {
     setIsModalVisible(false);
+  };
+  const handleDelete = (id: string) => {
+    Modal.confirm({
+      title: 'Are you sure you want to delete this feedback?',
+      content: 'Once deleted, this action cannot be undone.',
+      okText: 'Yes, Delete',
+      okType: 'danger',
+      cancelText: 'Cancel',
+      onOk: () => {
+        // Xóa feedback khỏi danh sách khi người dùng xác nhận
+        setFeedbackList(feedbackList.filter(feedback => feedback.id !== id));
+      },
+    });
   };
   const handleOk =async (values: { currentPassword: string; newPassword: string }) => {
     console.log('Password change values:', values);
@@ -70,8 +125,7 @@ const Profile: React.FC = () => {
     
   };
   useEffect(() => {
-    fetchProfile();
-    fetchFeedback();
+      fetchProfile();
   }, []);
   console.log('dataUser?.data?.avatar :>> ', dataUser?.data?.address);
   return (
@@ -200,19 +254,66 @@ const Profile: React.FC = () => {
                 </Form>
               </Modal>
               <Card title="Feedback" className="mt-6">
-                  <List
-                    itemLayout="horizontal"
-                    dataSource={feedbackList}
-                    renderItem={(item) => (
-                      <List.Item>
-                        <List.Item.Meta
-                          title={<span>{item.title}</span>}
-                          description={item.content}
-                        />
-                      </List.Item>
-                    )}
-                  />
-                </Card>
+                <List
+                  itemLayout="horizontal"
+                  dataSource={feedbackList}
+                  renderItem={(item) => (
+                    <List.Item
+                      actions={[
+                        <Button 
+                          type="link" 
+                          onClick={() => handleEdit(item.id)}  // Gọi hàm edit khi nhấn vào nút Edit
+                        >
+                          Edit
+                        </Button>,
+                        <Button 
+                          type="link" 
+                          danger 
+                          onClick={() => handleDelete(item.id)}  // Gọi hàm delete khi nhấn vào nút Delete
+                        >
+                          Delete
+                        </Button>
+                      ]}
+                    >
+                      <List.Item.Meta
+                        title={<span>{item?.description}</span>}
+                        description={
+                          <>
+                            <div>Rating: {item?.rating}</div>
+                            <div>Product: {item?.product}</div>
+                          </>
+                        }
+                      />
+                    </List.Item>
+                  )}
+                />
+              </Card>
+              <Modal
+                title="Edit Feedback"
+                open={isModalVisible1}
+                onCancel={handleCancelEdit}
+                onOk={handleSaveEdit}  // Lưu thông tin chỉnh sửa
+                okText="Save"
+                cancelText="Cancel"
+              >
+                <div>
+                  <div style={{ marginBottom: 16 }}>
+                    <label>Description:</label>
+                    <Input
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      placeholder="Enter description"
+                    />
+                  </div>
+                  <div>
+                    <label>Rating:</label>
+                    <Rate
+                      value={rating}
+                      onChange={setRating}  // Cập nhật rating khi người dùng thay đổi
+                    />
+                  </div>
+                </div>
+              </Modal>
               </div>
 
             </Content>

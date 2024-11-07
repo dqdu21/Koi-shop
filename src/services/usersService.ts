@@ -1,5 +1,6 @@
 import { message } from "antd";
 import {
+  Feedback,
   User,
   UserData,
   UserSearchRequest,
@@ -22,7 +23,16 @@ export const getUsers = async (
   }
 };
 //-----------------------------------------------------------------------------------------------
-
+//--------------------------------- Get fee ------------------------------------------
+export const getFeedback= async (id :string): Promise<Feedback> => {
+  try {
+    const response = await axiosInstance.get(`/feedback/user/${id}`)
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};
+//-----------------------------------------------------------------------------------------------
 //------------------------------ Get User Detail ------------------------------------------------
 export const getUserDetail = async (userId: string): Promise<UserData> => {
   try {
