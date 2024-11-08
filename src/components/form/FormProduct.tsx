@@ -200,7 +200,7 @@ const KoiFishForm = ({handleSubmit, initialData} : {handleSubmit: (data:any) => 
           <FormLabel>Category ID</FormLabel>
           <FormControl>
             <div className="">
-            <select className="w-[180px] border border-gray-300 rounded p-2">
+            <select className="w-[180px] border border-gray-300 rounded p-2"  {...form.register("categoryId")} >
                 {catgories.map((category: any) => (
                   <option value={category.id} className="">{category.name}</option>
                 ))}
