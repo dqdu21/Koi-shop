@@ -27,3 +27,13 @@ export const payOrder = async (cartId: string) => {
     console.error(err.message);
   }
 }
+
+
+export const getOrderHistory = async () => {
+  try {
+    const res = await axiosInstance.get("/order/own");
+    return res.data.result.data;
+  } catch (error) {
+    console.error(error)
+  }
+}

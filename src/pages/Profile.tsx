@@ -8,6 +8,8 @@ import AppSider from '../components/layout/AppSider';
 import { useSider } from '../app/context/SiderProvider';
 import { changePassword, deleteFeedback, getFeedback, getProfile } from '../services/usersService';
 import {  User } from '../models/Types';
+import {  Button  as Btn} from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 const { Title } = Typography;
 interface FeedbackData {
   id: string;
@@ -20,6 +22,7 @@ interface FeedbackData {
 }
 
 const Profile: React.FC = () => {
+  const navigate = useNavigate()
   const { collapsed } = useSider();
   const [dataUser,setDataUser] = useState<User | null>(null)
   const [reload,setReload] = useState(false);
@@ -72,7 +75,7 @@ const Profile: React.FC = () => {
     try {
       const feedbackResponse = await getFeedback(id);
       if (Array.isArray(feedbackResponse?.result?.data)) {
-        setFeedbackList(feedbackResponse.result.data); 
+        setFeedbackList(feedbackResponse.result.data);
       } else {
         console.error('Dữ liệu phản hồi không phải là một mảng hợp lệ');
       }
@@ -127,7 +130,7 @@ const Profile: React.FC = () => {
         description: ChangePassword?.message
       });
     }
-    
+
   };
   useEffect(() => {
       fetchProfile();
@@ -163,6 +166,7 @@ const Profile: React.FC = () => {
               {/* Main Content for Consignment Page */}
               <div className="container mx-auto py-8 px-4 lg:px-16 bg-white shadow-lg rounded-lg">
                 <Card className="mb-6" bordered={false}>
+                  <div className="flex flex-row justify-between items-center">
                   <div className="flex items-center">
                     {dataUser && dataUser?.data?.avatar ? (
                       <Avatar size={80} src={dataUser?.data?.avatar} />
@@ -174,6 +178,9 @@ const Profile: React.FC = () => {
                       <p>{dataUser?.data?.email}</p>
                     </div>
                   </div>
+                  <Btn className='bg-red-500 text-white' onClick={() => navigate('/order-history')}>Order history</Btn>
+                  </div>
+
                 </Card>
                 <Card title="Detailed information" bordered={false}>
                   <Descriptions column={1}>
@@ -265,15 +272,15 @@ const Profile: React.FC = () => {
                   renderItem={(item) => (
                     <List.Item
                       actions={[
-                        <Button 
-                          type="link" 
+                        <Button
+                          type="link"
                           onClick={() => handleEdit(item.id)}  // Gọi hàm edit khi nhấn vào nút Edit
                         >
                           Edit
                         </Button>,
-                        <Button 
-                          type="link" 
-                          danger 
+                        <Button
+                          type="link"
+                          danger
                           onClick={() => handleDelete(item.id)}  // Gọi hàm delete khi nhấn vào nút Delete
                         >
                           Delete

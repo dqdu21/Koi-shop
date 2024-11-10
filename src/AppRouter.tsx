@@ -10,6 +10,8 @@ import WelcomeAdmin from './pages/admin/welcome/WelcomeAdmin';
 import ProductDetail from './pages/ProductDetail';
 import Profile from './pages/Profile';
 import Product from './pages/admin/product/product';
+import PaymentSuccess from './pages/payment-successs/PaymentSuccess';
+import OrderHistory from './pages/OrderHistory';
 
 const AppRouter = () => {
   return (
@@ -28,6 +30,9 @@ const AppRouter = () => {
         <Route path='/admin/product-manage' element={<Product />} />
                     {/* Staff Routes */}
         <Route path="/staff" element={<WelcomeStaff />} />
+        <Route path='/payment-success' element={<PaymentSuccess />} />
+        <Route path='/order-history' element={<OrderHistory />} />
+
       </Routes>
     </BrowserRouter>
   );
