@@ -44,7 +44,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { User } from "../../src/models/Types"; // Đảm bảo rằng User là một interface đã định nghĩa
 import { getCurrentLogin } from "../services/authService";
-import { getCartsAPI } from "../services/cartService";
+import { getCartsAPI, createCartAPI } from "../services/cartService";
 
 interface AuthContextType {
   user: any;
@@ -77,6 +77,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     sessionStorage.setItem("user", JSON.stringify(userData));
     setIsLoggedIn(true);
     setUser(userData);
+
   };
 
 
@@ -92,7 +93,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const getUserCurrent = async (token:any) => {
     const res = await getCurrentLogin(token);
     const response = await getCartsAPI()
-    const cart = response.result.data[0]
+    let cart = response.result.data[0]
+    if (!cart) {
+      console.log('Test');
+      await createCartAPI({
+        currency: "",
+        status: 1
+      })
+      const cartCreated = await getCartsAPI()
+      cart = cartCreated.result.data[0]
+    }
     // const userData = {cart}
     const userData = {cartId: cart.id, ...res}
     setUser(userData);

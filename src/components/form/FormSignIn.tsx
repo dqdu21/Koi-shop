@@ -83,7 +83,7 @@ interface LoginUser extends User {
 const handleLogin = async (values: { email: string; password: string }) => {
   try {
     setLoading(true);
-    
+
     // Gọi API đăng nhập
     const response = await loginService(values.email, values.password);
     console.log('response :>> ', response);
@@ -98,20 +98,23 @@ const handleLogin = async (values: { email: string; password: string }) => {
       };
       // Extract only User properties for the context
       const { email, ...userData } = loginUser;
-      
+
       login(token, userData,refreshToken); // Lưu thông tin vào context với User properties only
       sessionStorage.setItem("userEmail", email); // Store email separately
-      
+
       notification.success({
         message: "Login Successful",
       });
       setLoading(false);
       if (values.email === "admin@gmail.com") {
         navigate("/admin");
+        location.reload();
       } else if (values.email === "manager@gmail.com") {
         navigate("/manager");
+        location.reload();
       } else {
         navigate("/");
+        location.reload();
       }
     }
   } catch (error: any) {
@@ -124,7 +127,7 @@ const handleLogin = async (values: { email: string; password: string }) => {
   }
 };
 
-  
+
 
   return (
     <div className="relative">

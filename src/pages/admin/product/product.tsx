@@ -7,6 +7,8 @@ import { Trash, Plus, Pen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import KoiFishForm from "@/components/form/FormProduct";
 import { addProduct, updateProduct } from "@/services/productService";
+import { getCredentialByProductId, createCredential } from "@/services/credentialService";
+import CredentialForm from "@/components/form/FormCredential";
 
 const { Content } = Layout;
 import {
@@ -33,15 +35,28 @@ interface Product {
   weight: number
   gender: string
   price: number
+  credential: {
+    id: string
+    name: string
+    description: string
+  }
 }
 
 export default function Product() {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenUpdate,setIsOpenUpdate] = useState(false)
+  const [isOpenCredential, setIsOpenCredential] = useState(false)
   const [products,setProducts] = useState<Product[]>([])
   const [productSelected,setProductSelected] = useState<any>()
   const fetchProduct = async () => {
-    const res = await GetAllProduct()
+    const res = await GetAllProduct();
+    for (const item of res.result.data) {
+      const credential = await getCredentialByProductId(item.id);
+      console.log('Test: ', credential);
+      item.credential = credential ? credential.data[0] : credential;
+      console.log(item);
+    }
+    console.log('Check: ', res.result.data);
     setProducts(res.result.data);
   }
   useEffect(() => {
@@ -59,6 +74,11 @@ export default function Product() {
   }
   const handleDelete = async (id: string) => {
     await deleteProduct(id);
+    fetchProduct()
+  }
+  const handleCreateCredential = async (data: any) => {
+    await createCredential(data);
+    setIsOpenCredential(false)
     fetchProduct()
   }
   return (
@@ -98,7 +118,9 @@ export default function Product() {
                 <TableHead>Weight</TableHead>
                 <TableHead>Description</TableHead>
                 <TableHead>Price</TableHead>
-                <TableHead className="text-center">Chi tiết</TableHead>
+                <TableHead className="">Chứng chỉ</TableHead>
+                <TableHead className="text-center"></TableHead>
+
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -110,6 +132,23 @@ export default function Product() {
                 <TableCell className="text-left">{product.weight}</TableCell>
                 <TableCell className="text-left">{product.description}</TableCell>
                 <TableCell className="text-left">{product.price}</TableCell>
+                <TableCell className="text-left">{product.credential ? product.credential.name :
+
+                  <Dialog open={isOpenCredential} onOpenChange={setIsOpenCredential}>
+  <DialogTrigger>
+  <Button>Thêm chứng chỉ</Button>
+  </DialogTrigger>
+  <DialogContent className="bg-white">
+    <DialogHeader>
+      <DialogTitle>Thêm chứng chỉ</DialogTitle>
+    </DialogHeader>
+      <CredentialForm handleSubmit={(data) => handleCreateCredential({...data,productId: product.id})}/>
+  </DialogContent>
+</Dialog>
+}
+
+
+                </TableCell>
                 <TableCell className="flex justify-center gap-4">
                   <Trash className="cursor-pointer" onClick={() => handleDelete(product.id)}/>
                   <Pen className="cursor-pointer" onClick={() => {
