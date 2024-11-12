@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Layout, Typography, Card, Avatar, Descriptions, notification, Button, Modal, Form, Input, List, Rate } from 'antd';
+import { Layout, Typography, Card, Avatar, Descriptions, notification, Button, Modal, Form, Input, List, Rate, Row, Col } from 'antd';
 import Sider from 'antd/es/layout/Sider';
 import { Content, Footer, Header } from 'antd/es/layout/layout';
 import AppHeader from '../components/layout/AppHeader';
 import AppFooter from '../components/layout/AppFooter';
 import AppSider from '../components/layout/AppSider';
 import { useSider } from '../app/context/SiderProvider';
-import { changePassword, deleteFeedback, getFeedback, getProfile } from '../services/usersService';
+import { addFeedback, changePassword, deleteFeedback, getFeedback, getProfile, putFeedback } from '../services/usersService';
 import {  User } from '../models/Types';
 import {  Button  as Btn} from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
+import { getOrderHistory } from '@/services/orderService';
 const { Title } = Typography;
 interface FeedbackData {
   id: string;
@@ -25,14 +26,22 @@ const Profile: React.FC = () => {
   const navigate = useNavigate()
   const { collapsed } = useSider();
   const [dataUser,setDataUser] = useState<User | null>(null)
+  const [listProductBuy, setListProductBuy] = useState<any[]>([]);
   const [reload,setReload] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalVisible1, setIsModalVisible1] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [idProductBuy, setIdProductBuy] = useState<string>("");
   const [feedbackList, setFeedbackList] = useState<FeedbackData[]>([]);
-  const [currentFeedback, setCurrentFeedback] = useState<FeedbackData | null>(null);
-  const [description, setDescription] = useState('');  // Trường mô tả
+  const [description, setDescription] = useState('');
   const [rating, setRating] = useState(0);
-  console.log('feedbackList :>> ', feedbackList);
+  const fetchListProductBuy = async() => {
+    const res = await getOrderHistory()
+    const allProducts = res?.flatMap((order: any) => 
+      order?.orderItems?.map((item: any) => item.product)
+    );
+    setListProductBuy(allProducts)
+  }
   const fetchProfile = async () => {
     try {
       const response = await getProfile();
@@ -46,23 +55,63 @@ const Profile: React.FC = () => {
       });
     }
   };
-  const handleSaveEdit = () => {
-    if (currentFeedback) {
-      const updatedFeedback = { ...currentFeedback, description, rating };
-      const updatedList = feedbackList.map(feedback =>
-        feedback.id === updatedFeedback.id ? updatedFeedback : feedback
-      );
-      setFeedbackList(updatedList);  // Cập nhật lại danh sách feedback
-      setIsModalVisible(false);  // Đóng modal sau khi lưu
+  const handleSave = async() => {
+    if(isEditing){
+      const res = await putFeedback(idProductBuy,description,rating)
+
+      if(res.statusCode === 200){
+        notification.success({
+          message: "Edit FeedBack successfully",
+          description: "Feedback updated successfully.",
+        })
+      }else{
+        notification.error({
+          message: "Edit FeedBack Failed",
+          description: "Edit FeedBack Failed.",
+        })
+      }
+      setIsModalVisible1(false); 
+      setIdProductBuy("");
+    }else{
+      if(idProductBuy===""){
+        notification.error({
+          message: "Add FeedBack Failed",
+          description: "Please select the product.",
+        })
+      }{
+        const res = await addFeedback(idProductBuy,description,rating)
+
+        if(res.statusCode===201){
+          notification.success({
+            message: "Add FeedBack successfully",
+            description: "Add FeedBack successfully.",
+          })
+        }{
+          notification.error({
+            message: "Add FeedBack Failed",
+            description: "You have already feedback on this product.",
+          })
+        }
+        setIsModalVisible1(false); 
+        setReload(!reload);
+        setIdProductBuy("");
+      }
     }
   };
+  const handleAddFeedback = () =>{
+    setIsEditing(false);
+    setDescription('');
+    setRating(0);
+    setIsModalVisible1(true);
+  }
   const handleEdit = (id: string) => {
+    setIdProductBuy(id);
+    setIsEditing(true);   
     const feedbackToEdit = feedbackList.find(feedback => feedback.id === id);
     if (feedbackToEdit) {
-      setCurrentFeedback(feedbackToEdit);
       setDescription(feedbackToEdit.description);
       setRating(feedbackToEdit.rating);
-      setIsModalVisible1(true);  // Hiển thị modal khi click Edit
+      setIsModalVisible1(true); 
     }
   };
   const handleCancelEdit = () => {
@@ -77,7 +126,7 @@ const Profile: React.FC = () => {
       if (Array.isArray(feedbackResponse?.result?.data)) {
         setFeedbackList(feedbackResponse.result.data);
       } else {
-        console.error('Dữ liệu phản hồi không phải là một mảng hợp lệ');
+
       }
     } catch (error: any) {
       notification.error({
@@ -98,16 +147,15 @@ const Profile: React.FC = () => {
       cancelText: 'Cancel',
       onOk: async() => {
         await deleteFeedback(id)
-        setReload(!reload)
         notification.success({
           message: "Delete feedback success",
           description: "Delete feedback success",
         })
+        setReload(!reload)
       },
     });
   };
   const handleOk =async (values: { currentPassword: string; newPassword: string }) => {
-    console.log('Password change values:', values);
     const refreshToken = sessionStorage.getItem("refreshToken")
     if (!refreshToken) {
       notification.error({
@@ -117,7 +165,6 @@ const Profile: React.FC = () => {
       return;
     }
     const ChangePassword = await changePassword(refreshToken ,values?.currentPassword,values?.newPassword)
-    console.log('ChangePassword :>> ', ChangePassword);
     if(ChangePassword && ChangePassword?.statusCode===200){
       notification.success({
         message: "Password change successfully",
@@ -134,8 +181,8 @@ const Profile: React.FC = () => {
   };
   useEffect(() => {
       fetchProfile();
+      fetchListProductBuy();
   }, [reload]);
-  console.log('dataUser?.data?.avatar :>> ', dataUser?.data?.address);
   return (
     <div className="flex">
       <Layout className="min-h-screen flex flex-col">
@@ -265,7 +312,16 @@ const Profile: React.FC = () => {
                   </Form.Item>
                 </Form>
               </Modal>
-              <Card title="Feedback" className="mt-6">
+              <Card title={
+                <Row justify="space-between" align="middle">
+                  <Col>
+                    Feedback
+                  </Col>
+                  <Col>
+                    <Button type="primary" onClick={handleAddFeedback}  >Add Feedback</Button>
+                  </Col>
+                </Row>
+              } className="mt-6">
                 <List
                   itemLayout="horizontal"
                   dataSource={feedbackList}
@@ -274,14 +330,14 @@ const Profile: React.FC = () => {
                       actions={[
                         <Button
                           type="link"
-                          onClick={() => handleEdit(item.id)}  // Gọi hàm edit khi nhấn vào nút Edit
+                          onClick={() => handleEdit(item.id)}
                         >
                           Edit
                         </Button>,
                         <Button
                           type="link"
                           danger
-                          onClick={() => handleDelete(item.id)}  // Gọi hàm delete khi nhấn vào nút Delete
+                          onClick={() => handleDelete(item.id)}
                         >
                           Delete
                         </Button>
@@ -301,10 +357,10 @@ const Profile: React.FC = () => {
                 />
               </Card>
               <Modal
-                title="Edit Feedback"
+                title={isEditing ? "Edit Feedback" : "Add Feedback"}
                 open={isModalVisible1}
                 onCancel={handleCancelEdit}
-                onOk={handleSaveEdit}  // Lưu thông tin chỉnh sửa
+                onOk={handleSave} 
                 okText="Save"
                 cancelText="Cancel"
               >
@@ -321,9 +377,45 @@ const Profile: React.FC = () => {
                     <label>Rating:</label>
                     <Rate
                       value={rating}
-                      onChange={setRating}  // Cập nhật rating khi người dùng thay đổi
+                      onChange={setRating}
                     />
                   </div>
+                  {!isEditing &&
+                    <div style={{ marginTop: 16 }}>
+                      <label>Purchased Products:</label>
+                      <div
+                        style={{
+                          maxHeight: '200px',
+                          overflowY: 'auto',
+                        }}
+                      >
+                        <List
+                          dataSource={listProductBuy}
+                          renderItem={(product) => (
+                            <List.Item
+                              actions={[
+                                <Button 
+                                  type="primary" 
+                                  size="small" 
+                                  onClick={() => setIdProductBuy(product.id)}  
+                                  disabled={product.id===idProductBuy}
+                                >
+                                  Select
+                                </Button>
+                              ]}
+                            >
+                              <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                <div>
+                                  <strong>{product.name}</strong> - ${product.price}
+                                </div>
+                              </div>
+                            </List.Item>
+                          )}
+                        />
+                      </div>
+                    </div>
+                
+                  }
                 </div>
               </Modal>
               </div>

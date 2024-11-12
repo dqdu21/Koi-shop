@@ -54,6 +54,7 @@ export type User = {
 
 
 export type Feedback = {
+  statusCode: number,
   result:{
     data:{
       id: string;
