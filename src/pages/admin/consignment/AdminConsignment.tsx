@@ -61,16 +61,6 @@ export default function AdminConsignment() {
     fetchConsignments();
   }, []);
 
-  const handleDelete = async (id: string) => {
-    try {
-      await deleteConsignment(id);
-      fetchConsignments();
-      message.success("Consignment deleted successfully.");
-    } catch (error) {
-      message.error("Failed to delete consignment.");
-      console.error("Failed to delete consignment:", error);
-    }
-  };
 
   const handleApprove = async (consignmentId: string) => {
     try {

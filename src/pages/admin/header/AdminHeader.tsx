@@ -8,10 +8,10 @@ const AdminHeader = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Logic đăng xuất
-    console.log("Đăng xuất...");
-    navigate("/login");
-  };
+    sessionStorage.removeItem('token'); // Xoá token khỏi localStorage
+    sessionStorage.removeItem('refreshToken');
+    navigate('/');
+  } // Điều hướng về trang chủ
 
   return (
     <Header className="bg-white px-5 flex justify-between items-center">

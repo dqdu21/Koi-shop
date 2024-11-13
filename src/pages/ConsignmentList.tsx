@@ -6,6 +6,7 @@ import useConsignmentData from "@/components/hooks/consignment/useConsignmentDat
 import { ConsignmentOffline } from "../models/consignment";
 import { deleteConsignment, updateConsignment, payConsignment } from "../services/consignmentService";
 import dayjs from "dayjs";
+import MainLayout from "@/components/layout/MainLayout";
 
 const ConsignmentList: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -135,6 +136,7 @@ const ConsignmentList: React.FC = () => {
   ];
 
   return (
+    <MainLayout> 
     <div className="p-8 bg-white rounded-lg shadow-lg" style={{ maxWidth: 800, margin: "auto" }}>
       <h2 className="text-3xl font-bold mb-4" style={{ color: "#8B0000", textAlign: "center" }}>
         Danh Sách Ký Gửi Cá Koi
@@ -197,6 +199,7 @@ const ConsignmentList: React.FC = () => {
         </Form>
       </Modal>
     </div>
+    </MainLayout> 
   );
 };
 
