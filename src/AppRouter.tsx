@@ -12,6 +12,8 @@ import Profile from './pages/Profile';
 import Product from './pages/admin/product/product';
 import PaymentSuccess from './pages/payment-successs/PaymentSuccess';
 import OrderHistory from './pages/OrderHistory';
+import ConsignmentList from './pages/ConsignmentList';
+import ConsignmentDetail from './pages/ConsignmentDetail';
 
 const AppRouter = () => {
   return (
@@ -25,6 +27,9 @@ const AppRouter = () => {
         <Route path="/consignment" element={<Consignment/>} />
         <Route path="/profile" element={<Profile/>} />
         <Route path="/consignment-form" element={<ConsignmentForm/>} />
+        <Route path="/consignments" element={<ConsignmentList/>} />
+        <Route path="/consignment/:consignmentId" element={<ConsignmentDetail />} />
+        {/* Admin Routes */}
                     {/* Admin Routes */}
         <Route path="/admin" element={<WelcomeAdmin />} />
         <Route path='/admin/product-manage' element={<Product />} />

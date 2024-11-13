@@ -1,218 +1,219 @@
-import React, { useState } from 'react';
-import {
-  Button,
-  Form,
-  Input,
-  InputNumber,
-  DatePicker,
-  Radio,
-} from 'antd';
-import MainLayout from '../components/layout/MainLayout';
+import React, { useState } from "react";
+import { Button, Form, Input, InputNumber, Radio, DatePicker, message, Select } from "antd";
+import useRefreshData from "../components/hooks/useRefreshData";
+import { ConsignmentOnline, ConsignmentOffline } from "../models/consignment";
+import useAddConsignment from "../components/hooks/consignment/useAddConsignment";
+import { useNavigate } from "react-router-dom";
 
 const ConsignmentForm: React.FC = () => {
   const [form] = Form.useForm();
-  const [consignmentType, setConsignmentType] = useState<'online' | 'offline'>(
-    'online'
-  );
+  const [consignmentType, setConsignmentType] = useState<"online" | "offline">("online");
+  const navigate = useNavigate();
 
-  const handleConsignmentTypeChange = (e: any) => {
-    setConsignmentType(e.target.value);
+  // Hook để làm mới dữ liệu sau khi thêm consignment thành công
+  const refreshData = async () => {
+    message.info("Data refreshed");
   };
+  const { refresh, loading: refreshing } = useRefreshData(refreshData);
 
-  const handleSubmit = (values: any) => {
-    console.log('Submitted values:', values);
-    // Xử lý yêu cầu ký gửi dựa trên consignmentType
+  // Hook để thêm consignment
+  const { addConsignment, loading } = useAddConsignment(() => {
+    form.resetFields(); // Xóa form sau khi đăng ký thành công
+    refresh(); // Làm mới dữ liệu
+    message.success("Đăng ký ký gửi thành công!");
+    navigate("/consignments");
+  });
+
+  const handleSubmit = (values: ConsignmentOnline | ConsignmentOffline) => {
+    const isOnline = consignmentType === "online";
+    addConsignment(values, isOnline);
   };
 
   return (
-    <MainLayout>
-      <div
-        className="p-8 bg-white rounded-lg shadow-lg"
-        style={{ maxWidth: '100%', margin: 'auto' }}
-      >
-        <h2
-          className="text-3xl font-bold mb-4"
-          style={{ color: '#8B0000', textAlign: 'center' }}
-        >
+    <div className="p-8 bg-white rounded-lg shadow-lg" style={{ maxWidth: 600, margin: "auto" }}>
+      <h2 className="text-3xl font-bold mb-4" style={{ color: "#8B0000", textAlign: "center" }}>
         Đăng Ký Ký Gửi Cá Koi
       </h2>
 
       <Form
         form={form}
-        layout="vertical"
         onFinish={handleSubmit}
-        style={{ color: '#1f2937' }}
+        layout="vertical"
       >
         {/* Lựa chọn hình thức ký gửi */}
         <Form.Item label="Hình Thức Ký Gửi" name="consignmentType">
           <Radio.Group
-            onChange={handleConsignmentTypeChange}
             value={consignmentType}
+            onChange={(e) => setConsignmentType(e.target.value)}
           >
             <Radio.Button value="online">Online</Radio.Button>
             <Radio.Button value="offline">Offline</Radio.Button>
           </Radio.Group>
         </Form.Item>
 
-        {/* Thông tin chi tiết cho Online */}
-        {consignmentType === 'online' && (
+        {/* Form cho Consignment Online */}
+        {consignmentType === "online" && (
           <>
             <Form.Item
               label="Mã Đơn Hàng"
               name="orderId"
-              rules={[{ required: true, message: 'Vui lòng nhập mã đơn hàng' }]}
+              rules={[{ required: true, message: "Vui lòng nhập mã đơn hàng" }]}
             >
-              <Input placeholder="Nhập mã đơn hàng" />
+              <Input placeholder="e.g. CA123456789US" />
             </Form.Item>
             <Form.Item
               label="Mã Mục Hàng"
               name="orderItemId"
-              rules={[{ required: true, message: 'Vui lòng nhập mã mục hàng' }]}
+              rules={[{ required: true, message: "Vui lòng nhập mã mục hàng" }]}
             >
-              <Input placeholder="Nhập mã mục hàng" />
+              <Input placeholder="e.g. ITEM123456" />
             </Form.Item>
             <Form.Item
               label="Tỷ Lệ Hoa Hồng (%)"
               name="commissionPercentage"
-              rules={[
-                { required: true, message: 'Vui lòng nhập tỷ lệ hoa hồng' },
-              ]}
+              rules={[{ required: true, message: "e.g. 15" }]}
             >
-              <InputNumber
-                min={0}
-                max={100}
-                style={{ width: '100%' }}
-                placeholder="Nhập tỷ lệ hoa hồng"
-              />
+              <InputNumber min={0} max={100} style={{ width: "100%" }} placeholder="e.g. 15" />
             </Form.Item>
             <Form.Item
               label="Phí Ký Gửi"
               name="consignmentFee"
-              rules={[{ required: true, message: 'Vui lòng nhập phí ký gửi' }]}
+              rules={[{ required: true, message: "e.g. 100000" }]}
             >
-              <InputNumber
-                min={0}
-                style={{ width: '100%' }}
-                placeholder="Nhập phí ký gửi"
-              />
+              <InputNumber min={0} style={{ width: "100%" }} placeholder="e.g. 100000" />
             </Form.Item>
             <Form.Item
               label="Ngày Hết Hạn Ký Gửi"
               name="expiryDate"
-              rules={[
-                { required: true, message: 'Vui lòng chọn ngày hết hạn' },
-              ]}
+              rules={[{ required: true, message: "Vui lòng chọn ngày hết hạn" }]}
             >
-              <DatePicker style={{ width: '100%' }} />
+              <DatePicker style={{ width: "100%" }} placeholder="Chọn ngày hết hạn" />
             </Form.Item>
             <Form.Item
               label="Số Tiền Giao Dịch"
               name="dealingAmount"
-              rules={[
-                { required: true, message: 'Vui lòng nhập số tiền giao dịch' },
-              ]}
+              rules={[{ required: true, message: "e.g. 150000" }]}
             >
-              <InputNumber
-                min={0}
-                style={{ width: '100%' }}
-                placeholder="Nhập số tiền giao dịch"
-              />
+              <InputNumber min={0} style={{ width: "100%" }} addonAfter="VND" placeholder="e.g. 150000" />
             </Form.Item>
           </>
         )}
 
-        {/* Thông tin chi tiết cho Offline */}
-        {consignmentType === 'offline' && (
+        {/* Form cho Consignment Offline */}
+        {consignmentType === "offline" && (
           <>
             <Form.Item
               label="Tên Sản Phẩm"
               name="name"
-              rules={[
-                { required: true, message: 'Vui lòng nhập tên sản phẩm' },
-              ]}
+              rules={[{ required: true, message: "e.g. Showa" }]}
             >
-              <Input placeholder="Nhập tên sản phẩm" />
+              <Input placeholder="e.g. Showa" />
             </Form.Item>
-            <Form.Item label="Mô Tả Sản Phẩm" name="description">
+            <Form.Item
+              label="Mô Tả"
+              name="description"
+              rules={[{ required: true, message: "Vui lòng nhập mô tả" }]}
+            >
               <Input.TextArea placeholder="Mô tả sản phẩm" rows={3} />
             </Form.Item>
             <Form.Item
               label="Số Lượng"
               name="quantity"
-              rules={[{ required: true, message: 'Vui lòng nhập số lượng' }]}
+              rules={[{ required: true, message: "e.g. 1" }]}
             >
-              <InputNumber
-                min={1}
-                style={{ width: '100%' }}
-                placeholder="Nhập số lượng"
-              />
+              <InputNumber min={1} style={{ width: "100%" }} placeholder="e.g. 1" />
             </Form.Item>
             <Form.Item
               label="Tỷ Lệ Hoa Hồng (%)"
               name="commissionPercentage"
-              rules={[
-                { required: true, message: 'Vui lòng nhập tỷ lệ hoa hồng' },
-              ]}
+              rules={[{ required: true, message: "e.g. 15" }]}
             >
-              <InputNumber
-                min={0}
-                max={100}
-                style={{ width: '100%' }}
-                placeholder="Nhập tỷ lệ hoa hồng"
-              />
+              <InputNumber min={0} max={100} style={{ width: "100%" }} placeholder="e.g. 15" />
             </Form.Item>
-            <Form.Item label="Xuất Xứ" name="origin">
-              <Input placeholder="Nhập xuất xứ" />
+            <Form.Item
+              label="Số Tiền Giao Dịch"
+              name="dealingAmount"
+              rules={[{ required: true, message: "e.g. 150000" }]}
+            >
+              <InputNumber min={0} style={{ width: "100%" }} addonAfter="VND" placeholder="e.g. 150000" />
             </Form.Item>
-            <Form.Item label="Tuổi" name="age">
-              <InputNumber
-                min={0}
-                style={{ width: '100%' }}
-                placeholder="Nhập tuổi của sản phẩm"
-              />
+            <Form.Item
+              label="Xuất Xứ"
+              name="origin"
+            >
+              <Input placeholder="e.g. Japan" />
             </Form.Item>
-            <Form.Item label="Chiều Dài (cm)" name="length">
-              <InputNumber
-                min={0}
-                style={{ width: '100%' }}
-                placeholder="Nhập chiều dài sản phẩm"
-              />
+            <Form.Item
+              label="Tuổi"
+              name="age"
+            >
+              <InputNumber min={0} style={{ width: "100%" }} placeholder="e.g. 2" />
             </Form.Item>
-            <Form.Item label="Loài/Loại" name="species">
-              <Input placeholder="Nhập loài hoặc loại sản phẩm" />
+            <Form.Item
+              label="Chiều Dài (cm)"
+              name="length"
+            >
+              <InputNumber min={0} style={{ width: "100%" }} placeholder="e.g. 30" />
             </Form.Item>
-            <Form.Item label="Màu Sắc" name="color">
-              <Input placeholder="Nhập màu sắc" />
+            <Form.Item
+              label="Loài/Loại"
+              name="species"
+            >
+              <Input placeholder="e.g. Kohaku" />
             </Form.Item>
-            <Form.Item label="Lượng Thức Ăn Cần Thiết" name="feedingVolume">
-              <Input placeholder="Nhập lượng thức ăn" />
+            <Form.Item
+              label="Màu Sắc"
+              name="color"
+            >
+              <Input placeholder="e.g. Red and White" />
             </Form.Item>
-            <Form.Item label="Tần Suất Lọc" name="filterRate">
-              <InputNumber
-                min={0}
-                style={{ width: '100%' }}
-                placeholder="Nhập tần suất lọc"
-              />
+            <Form.Item
+              label="Lượng Thức Ăn Cần Thiết"
+              name="feedingVolume"
+            >
+              <Input placeholder="e.g. 200g per day" />
             </Form.Item>
-            <Form.Item label="Giới Tính" name="gender">
+            <Form.Item
+              label="Tần Suất Lọc"
+              name="filterRate"
+            >
+              <InputNumber min={0} style={{ width: "100%" }} placeholder="e.g. 80" />
+            </Form.Item>
+            <Form.Item
+              label="Giới Tính"
+              name="gender"
+              rules={[{ required: true, message: "Vui lòng chọn giới tính" }]}
+            >
               <Radio.Group>
-                <Radio value={0}>Đực</Radio>
-                <Radio value={1}>Cái</Radio>
+                <Radio value="male">Đực</Radio>
+                <Radio value="female">Cái</Radio>
               </Radio.Group>
+            </Form.Item>
+            <Form.Item
+              label="Danh Mục"
+              name="categoryId"
+              rules={[{ required: true, message: "Vui lòng chọn danh mục" }]}
+            >
+              <Select placeholder="Chọn danh mục sản phẩm">
+                {/* Thay thế các giá trị dưới đây bằng dữ liệu danh mục thực tế nếu có */}
+                <Select.Option value="3D4FC185-049D-4A96-851B-1D320E7DBBA8">Lai F1</Select.Option>
+                <Select.Option value="5F18BF0C-7199-462C-B023-3CCF1FD9F806">Thuần chủng nhập khẩu</Select.Option>
+                <Select.Option value="9A17DCF5-1426-45EE-A32E-C23EE5FE40D9">Thuần Việt</Select.Option>
+              </Select>
             </Form.Item>
           </>
         )}
 
-        {/* Nút gửi yêu cầu ký gửi */}
         <Form.Item>
           <Button
             type="primary"
             htmlType="submit"
+            loading={loading || refreshing}
             style={{
-              backgroundColor: '#b91c1c',
-              borderColor: '#b91c1c',
-              width: '100%',
-              fontWeight: 'bold',
+              backgroundColor: "#b91c1c",
+              borderColor: "#b91c1c",
+              width: "100%",
+              fontWeight: "bold",
             }}
           >
             Gửi Yêu Cầu Ký Gửi
@@ -220,7 +221,6 @@ const ConsignmentForm: React.FC = () => {
         </Form.Item>
       </Form>
     </div>
-    </MainLayout>
   );
 };
 
