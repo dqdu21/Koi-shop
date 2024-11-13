@@ -5,7 +5,7 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 const app = express();
 
 app.use('/api', createProxyMiddleware({
-    target: 'https://koifarmshop.online',
+    target: 'https://koifarmshop.site',
     changeOrigin: true,
     pathRewrite: {
         '^/api': '/api'

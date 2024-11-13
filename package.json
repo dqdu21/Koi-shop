@@ -2,7 +2,7 @@
   "name": "online-learning-project",
   "private": true,
   "version": "0.1.0",
-  "proxy": "https://koifarmshop.online",
+  "proxy": "https://koifarmshop.site",
   "type": "module",
   "scripts": {
     "dev": "vite",

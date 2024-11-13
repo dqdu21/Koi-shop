@@ -23,6 +23,23 @@ export const getUsers = async (
   }
 };
 //-----------------------------------------------------------------------------------------------
+//--------------------------------- add feedback ------------------------------------------
+export const addFeedback= async (id :string,description: string, rating: number): Promise<Feedback> => {
+  try {
+    const response = await axiosInstance.post(`/feedback/product/${id}`,{
+      description,
+      rating
+    },{
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};
+//-----------------------------------------------------------------------------------------------
 //--------------------------------- Get feedback ------------------------------------------
 export const getFeedback= async (id :string): Promise<Feedback> => {
   try {
@@ -34,9 +51,16 @@ export const getFeedback= async (id :string): Promise<Feedback> => {
 };
 //-----------------------------------------------------------------------------------------------
 //--------------------------------- put feedback ------------------------------------------
-export const putFeedback= async (id :string): Promise<Feedback> => {
+export const putFeedback= async (idProductBuy :string, description: string, rating: number): Promise<Feedback> => {
   try {
-    const response = await axiosInstance.put(`/feedback/user/${id}`)
+    const response = await axiosInstance.put(`/feedback/${idProductBuy}`,{
+      description,
+      rating
+    },{
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
     return response.data;
   } catch (error: any) {
     throw new Error(error.message);
@@ -105,14 +129,14 @@ export const deleteUser = async (userId: string): Promise<void> => {
 //--------------------------------- ChangePassword -----------------------------------------
 export const changePassword = async (refreshToken: string, oldPassword: string, newPassword: string): Promise<any> => {
   console.log('refreshToken :>> ', refreshToken);
-  const token = sessionStorage.getItem("token")
   try {
-    const response =  await axiosInstance.put(`/user/change-password?token=${refreshToken}`, {
+    const encodedRefreshToken = encodeURIComponent(refreshToken);
+
+    const response =  await axiosInstance.put(`/user/change-password?token=${encodedRefreshToken}`, {
       oldPassword,
       newPassword,
     }, {
       headers: {
-        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });

@@ -57,18 +57,18 @@ const ProductDetail: React.FC = () => {
     const fetchProduct = async () => {
       try {
         const response = await axiosInstance.get(
-          `https://koifarmshop.online/api/product/${productID}`
+          `https://koifarmshop.site/api/product/${productID}`
         );
         setProduct(response.data.result.data);
 
         // Fetch product image
         const imageResponse = await axiosInstance.get(
-          `https://koifarmshop.online/api/media/product/${productID}`
+          `https://koifarmshop.site/api/media/product/${productID}`
         );
         setImageURL(imageResponse.data.result.data.imageUrl);
 
         const credentialResponse = await axiosInstance.get(
-          `https://koifarmshop.online/api/credential/product/${productID}`
+          `https://koifarmshop.site/api/credential/product/${productID}`
         );
         setCredential(credentialResponse.data.result.data);
       } catch (error) {}
@@ -98,7 +98,7 @@ const ProductDetail: React.FC = () => {
         })
       }
        const response = await axiosInstance.post(
-        `https://koifarmshop.online/api/cart/${cartId}/product/add`,
+        `https://koifarmshop.site/api/cart/${cartId}/product/add`,
         {
           productId: product?.id, // Adjust based on API requirements
           quantity: quantity,
