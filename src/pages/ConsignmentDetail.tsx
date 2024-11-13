@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Spin, Typography, Card, Descriptions, message } from "antd";
 import { ConsignmentOffline } from "../models/consignment";
-import { queryConsignmentById } from "../services/consignmentService"; // Import hàm gọi API
+import { queryConsignmentById } from "../services/consignmentService"; 
 
 const { Title } = Typography;
 

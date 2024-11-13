@@ -9,7 +9,7 @@ export interface Product {
   length?: number;
   species?: string;
   color?: string;
-  feedingVolume?: string; 
+  feedingVolume?: string;
   filterRate?: number;
   gender: string;
   inventory?: number;
@@ -22,12 +22,14 @@ export interface Product {
 export interface ConsignmentData {
   id: string;
   userId: string;
-  method: "online" | "offline"; 
+  method: "online" | "offline";
   commissionPercentage: number;
   dealingAmount: number;
   status: string;
   isForSell: boolean;
-  createdAt: Date; 
+  createdAt: Date;
+  consignmentFee: number;
+  expiryDate?: string;
   product: Product;
 }
 

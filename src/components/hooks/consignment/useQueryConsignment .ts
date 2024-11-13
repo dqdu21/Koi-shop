@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { message } from "antd";
-import { queryConsignmentsAdmin, queryOwnConsignments } from "../../../services/consignmentService";
+import { queryAdminConsignments, queryOwnConsignments } from "../../../services/consignmentService";
 import { DataTransfer, ConsignmentOnline, ConsignmentOffline } from "../../../models/consignment";
 
 const useQueryConsignment = (isAdmin: boolean, queryData: DataTransfer) => {
@@ -10,21 +10,22 @@ const useQueryConsignment = (isAdmin: boolean, queryData: DataTransfer) => {
   const fetchConsignments = async () => {
     setLoading(true);
     try {
-        const result = isAdmin
-          ? await queryConsignmentsAdmin(queryData)
-          : await queryOwnConsignments(queryData);
-        
-        if (result && result.data && result.data.pageData) {
-          setData(result.data.pageData);
-        } else {
-          throw new Error("Unexpected response structure");
-        }
-      } catch (error: any) {
-        message.error(error.message || "Failed to fetch consignments");
-      } finally {
-        setLoading(false);
+      const result = isAdmin
+        ? await queryAdminConsignments(queryData)
+        : await queryOwnConsignments(queryData);
+      
+      // Kiểm tra cấu trúc dữ liệu trả về
+      if (result && result.isSuccess && result.result && result.result.data) {
+        setData(result.result.data); // Sử dụng đúng thuộc tính từ kết quả trả về
+      } else {
+        throw new Error("Unexpected response structure");
       }
-    };
+    } catch (error: any) {
+      message.error(error.message || "Failed to fetch consignments");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchConsignments();

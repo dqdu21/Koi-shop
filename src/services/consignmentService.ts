@@ -57,7 +57,7 @@ export const deleteConsignment = async (consignmentId: string) => {
 };
 
 // GET: /consignment/${consignmentId}
-export const getConsignment = async (consignmentId: string) => {
+export const getConsignments = async (consignmentId: string) => {
   try {
     const res = await axiosInstance.get(`${APILink}/consignment/${consignmentId}`);
     return res.data;
@@ -69,10 +69,11 @@ export const getConsignment = async (consignmentId: string) => {
 };
 
 // POST: /consignment/admin/query
-export const queryAdminConsignments = async () => {
+export const queryAdminConsignments = async (queryData: DataTransfer) => {
   try {
     const response = await axiosInstance.post<{ isSuccess: boolean; result: { data: ConsignmentOffline[] } }>(
-      `${APILink}/consignment/admin/query`
+      `${APILink}/consignment/admin/query`,
+      queryData
     );
     return response.data;
   } catch (error: any) {
@@ -81,16 +82,21 @@ export const queryAdminConsignments = async () => {
   }
 };
 
-// PUT: /consignment/${consignmentId}/evaluate?isApproved=true or false
-export const evaluateConsignment = async (id: string, isApproved: boolean) => {
+// PUT: /consignment/{consignmentId}/evaluate?isApproved=true
+export const approveConsignment = async (consignmentId: string, isApproved: boolean) => {
   try {
-    const response = await axiosInstance.post<{ isSuccess: boolean }>(
-      `${APILink}/consignment/${id}/evaluate?isApproved=${isApproved}`
+    const response = await axiosInstance.put(
+      `${APILink}/consignment/${consignmentId}/evaluate`,
+      null,
+      { params: { isApproved } }
     );
     return response.data;
   } catch (error: any) {
-    console.error("Error evaluating consignment:", error);
-    throw error;
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    } else {
+      throw new Error("Failed to approve consignment.");
+    }
   }
 };
 

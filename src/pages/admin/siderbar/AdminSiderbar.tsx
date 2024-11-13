@@ -34,7 +34,7 @@ const AdminSidebar = () => {
           <Link to="/admin/product-manage">Quản lý sản phẩm</Link>
         </Menu.Item>
         <Menu.Item key="consign" icon={<ContrastOutlined />}>
-          <Link to="/admin/manage-consign">Quản lý ký gửi</Link>
+          <Link to="/admin/consignments">Quản lý ký gửi</Link>
         </Menu.Item>
         <Menu.Item key="approval" icon={<ContrastOutlined />}>
           <Link to="/admin/approval">Ký kết</Link>

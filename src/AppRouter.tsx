@@ -14,7 +14,7 @@ import PaymentSuccess from './pages/payment-successs/PaymentSuccess';
 import OrderHistory from './pages/OrderHistory';
 import ConsignmentList from './pages/ConsignmentList';
 import ConsignmentDetail from './pages/ConsignmentDetail';
-// import AdminConsignmentList from './pages/admin/consignment/AdminConsignmentList';
+import AdminConsignment from './pages/admin/consignment/AdminConsignment';
 
 const AppRouter = () => {
   return (
@@ -34,7 +34,7 @@ const AppRouter = () => {
                     {/* Admin Routes */}
         <Route path="/admin" element={<WelcomeAdmin />} />
         <Route path='/admin/product-manage' element={<Product />} />
-        {/* <Route path="/admin/consignments" element={<AdminConsignmentList />} />  */}
+        <Route path="/admin/consignments" element={<AdminConsignment />} /> 
 
                     {/* Staff Routes */}
         <Route path="/staff" element={<WelcomeStaff />} />
