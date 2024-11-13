@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Form, Input, InputNumber, Radio, DatePicker, message, Select } from "antd";
+import { Button, Form, Input, InputNumber, Radio, DatePicker, message, Select, Switch } from "antd";
 import useRefreshData from "../components/hooks/useRefreshData";
 import { ConsignmentOnline, ConsignmentOffline } from "../models/consignment";
 import useAddConsignment from "../components/hooks/consignment/useAddConsignment";
@@ -21,7 +21,7 @@ const ConsignmentForm: React.FC = () => {
     form.resetFields(); // Xóa form sau khi đăng ký thành công
     refresh(); // Làm mới dữ liệu
     message.success("Đăng ký ký gửi thành công!");
-    navigate("/consignments");
+    navigate("/consignment-list");
   });
 
   const handleSubmit = (values: ConsignmentOnline | ConsignmentOffline) => {
@@ -49,6 +49,15 @@ const ConsignmentForm: React.FC = () => {
             <Radio.Button value="online">Online</Radio.Button>
             <Radio.Button value="offline">Offline</Radio.Button>
           </Radio.Group>
+        </Form.Item>
+
+        <Form.Item
+          label="Có để bán không?"
+          name="isForSell"
+          valuePropName="checked"
+          initialValue={true} // Giá trị mặc định
+        >
+          <Switch checkedChildren="Có" unCheckedChildren="Không" />
         </Form.Item>
 
         {/* Form cho Consignment Online */}
@@ -195,7 +204,6 @@ const ConsignmentForm: React.FC = () => {
               rules={[{ required: true, message: "Vui lòng chọn danh mục" }]}
             >
               <Select placeholder="Chọn danh mục sản phẩm">
-                {/* Thay thế các giá trị dưới đây bằng dữ liệu danh mục thực tế nếu có */}
                 <Select.Option value="3D4FC185-049D-4A96-851B-1D320E7DBBA8">Lai F1</Select.Option>
                 <Select.Option value="5F18BF0C-7199-462C-B023-3CCF1FD9F806">Thuần chủng nhập khẩu</Select.Option>
                 <Select.Option value="9A17DCF5-1426-45EE-A32E-C23EE5FE40D9">Thuần Việt</Select.Option>

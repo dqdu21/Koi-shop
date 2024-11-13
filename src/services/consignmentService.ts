@@ -69,31 +69,28 @@ export const getConsignment = async (consignmentId: string) => {
 };
 
 // POST: /consignment/admin/query
-export const queryConsignmentsAdmin = async (data: DataTransfer) => {
+export const queryAdminConsignments = async () => {
   try {
-    const res = await axiosInstance.post<ConsignmentSearchResponse<ConsignmentOnline | ConsignmentOffline>>(
-      `${APILink}/consignment/admin/query`,
-      data
+    const response = await axiosInstance.post<{ isSuccess: boolean; result: { data: ConsignmentOffline[] } }>(
+      `${APILink}/consignment/admin/query`
     );
-    return res.data;
+    return response.data;
   } catch (error: any) {
-    if (error.response?.data?.message) {
-      throw new Error(error.response.data.message);
-    }
+    console.error("Error fetching admin consignments:", error);
+    throw error;
   }
 };
 
 // PUT: /consignment/${consignmentId}/evaluate?isApproved=true or false
-export const evaluateConsignment = async (consignmentId: string, isApproved: boolean) => {
+export const evaluateConsignment = async (id: string, isApproved: boolean) => {
   try {
-    const res = await axiosInstance.put(`${APILink}/consignment/${consignmentId}/evaluate`, null, {
-      params: { isApproved },
-    });
-    return res.data;
+    const response = await axiosInstance.post<{ isSuccess: boolean }>(
+      `${APILink}/consignment/${id}/evaluate?isApproved=${isApproved}`
+    );
+    return response.data;
   } catch (error: any) {
-    if (error.response?.data?.message) {
-      throw new Error(error.response.data.message);
-    }
+    console.error("Error evaluating consignment:", error);
+    throw error;
   }
 };
 
@@ -147,3 +144,19 @@ export const queryOwnConsignments = async (data: DataTransfer) => {
     }
   }
 };
+export const queryConsignmentById = async (id: string) => {
+  try {
+    const res = await axiosInstance.get<{ isSuccess: boolean; result: ConsignmentOffline }>(
+      `${APILink}/consignment/${id}`
+    );
+    return res.data;
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    } else {
+      throw new Error("Failed to fetch consignment detail.");
+    }
+  }
+}
+
+
