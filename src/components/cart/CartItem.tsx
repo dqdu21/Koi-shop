@@ -27,7 +27,7 @@ const CartItem: React.FC<CartItemProps> = ({ item, onRemove, isSelected, onSelec
 
     <Card className='px-8 py-4 my-2 grid grid-cols-[1fr_4fr_1fr] gap-2'>
       <img
-        src={`https://koifarmshop.online/api/media/product/${item.productId}`} // Fetches image based on product ID
+        src={`https://koifarmshop.site/api/media/product/${item.productId}`} // Fetches image based on product ID
 
         className="w-32 h-auto rounded-md" // Optional: style for image
         onError={(e) => {

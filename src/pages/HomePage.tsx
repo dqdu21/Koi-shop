@@ -60,7 +60,7 @@ const HomePage: React.FC = () => {
     const fetchCategories = async () => {
       try {
         const response = await axiosInstance.get(
-          "https://koifarmshop.online/api/category"
+          "https://koifarmshop.site/api/category"
         );
         setCategories(response.data.result.data); // assuming response.data.result.data contains the array of categories
       } catch (error) {
@@ -81,7 +81,7 @@ const HomePage: React.FC = () => {
         })
       }
        const response = await axiosInstance.post(
-        `https://koifarmshop.online/api/cart/${cartId}/product/add`,
+        `https://koifarmshop.site/api/cart/${cartId}/product/add`,
         {
           productId: product.id, // Adjust based on API requirements
           quantity: 1,
@@ -147,7 +147,7 @@ const HomePage: React.FC = () => {
                       >
                         <Link to={`/product/${product.id}`}>
                           <img
-                            src={`https://koifarmshop.online/api/media/product/${product.id}`} // Fetches image based on product ID
+                            src={`https://koifarmshop.site/api/media/product/${product.id}`} // Fetches image based on product ID
                             alt={product.name}
                             className="w-full h-auto rounded-md" // Optional: style for image
                             onError={(e) => {
