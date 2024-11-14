@@ -37,3 +37,13 @@ export const getOrderHistory = async () => {
     console.error(error)
   }
 }
+
+// export const GetOrders = async () => {
+//   try {
+//     const res = await axiosInstance.get("/order/admin/query");
+//     return res.data.result.data;
+//   } catch (error) {
+//     console.error("Error fetching orders:", error);
+//     return [];
+//   }
+// };

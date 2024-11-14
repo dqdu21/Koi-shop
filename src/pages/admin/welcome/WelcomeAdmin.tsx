@@ -13,8 +13,8 @@ const WelcomeAdmin = () => {
         <AdminHeader />
         <Content className="p-5 bg-gray-100 overflow-auto">
           <div className="bg-white p-5 rounded-lg shadow-md text-center">
-            <Title level={2}>Chào mừng đến với Admin Portal</Title>
-            <Text>Đây là trang quản lý dành riêng cho quản trị viên.</Text>
+            <Title level={2}>Welcome to the Admin Portal</Title>
+            <Text>This is the management page dedicated to administrators.</Text>
           </div>
         </Content>
       </Layout>

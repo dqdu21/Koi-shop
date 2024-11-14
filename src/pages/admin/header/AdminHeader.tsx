@@ -16,7 +16,7 @@ const AdminHeader = () => {
   return (
     <Header className="bg-white px-5 flex justify-between items-center">
       <div className="flex items-center">
-        <span className="mr-5 font-bold">Xin chào, Admin!</span>
+        <span className="mr-5 font-bold">Hello, Admin!</span>
         <LogoutOutlined className="text-xl cursor-pointer" onClick={handleLogout} />
       </div>
     </Header>

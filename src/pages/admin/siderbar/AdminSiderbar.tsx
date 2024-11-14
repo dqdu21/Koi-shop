@@ -19,28 +19,25 @@ const AdminSidebar = () => {
       </div>
       <Menu theme="dark" mode="inline" className="text-base">
         <Menu.Item key="admin" icon={<HomeMiniOutlined />}>
-          <Link to="/admin">Trang chủ</Link>
+          <Link to="/admin">Home</Link>
         </Menu.Item>
         <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
           <Link to="/dashboard">Dashboard</Link>
         </Menu.Item>
         <Menu.Item key="orders" icon={<ShoppingOutlined />}>
-          <Link to="/admin/manage-orders">Quản lý đơn hàng</Link>
+          <Link to="/admin/manage-orders">Manage Orders</Link>
         </Menu.Item>
         <Menu.Item key="users" icon={<UserOutlined />}>
-          <Link to="/admin/users">Quản lý người dùng</Link>
+          <Link to="/admin/users">Manage Users</Link>
         </Menu.Item>
         <Menu.Item key="product" icon={<ProductFilled />}>
-          <Link to="/admin/product-manage">Quản lý sản phẩm</Link>
+          <Link to="/admin/product-manage">Manage Products</Link>
         </Menu.Item>
         <Menu.Item key="consign" icon={<ContrastOutlined />}>
-          <Link to="/admin/consignments">Quản lý ký gửi</Link>
-        </Menu.Item>
-        <Menu.Item key="approval" icon={<ContrastOutlined />}>
-          <Link to="/admin/approval">Ký kết</Link>
+          <Link to="/admin/consignments">Manage Consignments</Link>
         </Menu.Item>
         <Menu.Item key="settings" icon={<SettingOutlined />}>
-          <Link to="/admin/settings">Cài Đặt Hệ Thống</Link>
+          <Link to="/admin/settings">System Settings</Link>
         </Menu.Item>
       </Menu>
     </Sider>

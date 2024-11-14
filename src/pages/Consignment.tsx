@@ -16,11 +16,11 @@ const Consignment: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const headings = [
-    { id: 'section1', title: 'Quy trình ký gửi' },
-    { id: 'section2', title: 'Các phương thức ký gửi' },
-    { id: 'section3', title: 'Chính sách ký gửi' },
-    { id: 'section4', title: 'Ý nghĩa của việc ký gửi cá Koi' },
-    { id: 'section5', title: 'FKoi Shop cam kết' }
+    { id: 'section1', title: 'Consignment Process' },
+    { id: 'section2', title: 'Consignment Methods' },
+    { id: 'section3', title: 'Consignment Policy' },
+    { id: 'section4', title: 'Significance of Koi Fish Consignment' },
+    { id: 'section5', title: 'FKoi Shop Commitment' }
   ];
 
   const handleConsignmentClick = () => {
@@ -60,49 +60,49 @@ const Consignment: React.FC = () => {
             <Content className="flex-grow overflow-auto p-8 bg-gray-50">
               {/* Main Content for Consignment Page */}
               <div className="container mx-auto py-8 px-4 lg:px-16 bg-white shadow-lg rounded-lg">
-                <h1 className="text-3xl font-bold text-center text-red-800 mb-6">Ký gửi cá Koi</h1>
+                <h1 className="text-3xl font-bold text-center text-red-800 mb-6">Koi Fish Consignment</h1>
 
                 <div className="bg-white shadow-lg rounded-lg p-8 mb-8">
                   <h2 id="section1" className="text-2xl font-bold text-red-800 mb-4">
-                    Quy trình ký gửi
+                    Consignment Process
                   </h2>
                   <p className="text-lg text-gray-700 leading-relaxed">
-                    - 99% những người nuôi cá đều mong em koi của mình được “gả” vào gia đình tốt, đảm bảo cuộc sống, tương lai. 
-                    Một số người chỉ nuôi Koi bằng đam mê không đủ quan hệ rộng để trao đổi, bán các em koi đẹp.
+                    - 99% of Koi keepers want their Koi fish to be "married off" to a good family that ensures their future and well-being. 
+                    Some owners, fueled by passion, lack connections to exchange or sell their beautiful Koi.
                     <br />
-                    - Vì vậy FKoi Shop ra đời tính năng này nhằm giúp đáp ứng nguyện vọng đó. Dịch vụ này đảm bảo rằng cá Koi sẽ được bán đúng
-                    giá trị cho những người thực sự đam mê và đảm bảo cuộc sống tương lai tốt đẹp cho cá.
+                    - That’s why FKoi Shop offers this feature to help meet this desire. This service ensures that Koi are sold at fair value 
+                    to true enthusiasts and guarantees a bright future for the fish.
                   </p>
                 </div>
 
                 <div className="bg-white shadow-lg rounded-lg p-8 mb-8">
                   <h2 id="section2" className="text-2xl font-bold text-red-800 mb-4">
-                    Các phương thức ký gửi
+                    Consignment Methods
                   </h2>
 
                   <div className="space-y-4">
                     <div className="bg-gray-100 p-4 rounded-lg shadow-md">
-                      <h3 className="text-xl font-bold text-red-700 mb-2">Ký gửi Online</h3>
+                      <h3 className="text-xl font-bold text-red-700 mb-2">Online Consignment</h3>
                       <p className="text-gray-600 text-lg leading-relaxed">
-                        - Phù hợp với những người nuôi Koi để kinh doanh, đã có hệ thống website và phần mềm quản lý.
+                        - Suitable for those raising Koi for business, with an existing website and management system.
                       </p>
                       <p className="text-gray-600 text-lg leading-relaxed">
-                        - Ký gửi cá tại các trang trại Koi lớn để mở rộng mạng lưới khách hàng.
+                        - Consign fish to large Koi farms to expand customer network.
                       </p>
                     </div>
                   </div>
 
                   <div className="space-y-4">
                     <div className="bg-gray-100 p-4 rounded-lg shadow-md">
-                      <h3 className="text-xl font-bold text-red-700 mb-2">Ký gửi Offline</h3>
+                      <h3 className="text-xl font-bold text-red-700 mb-2">Offline Consignment</h3>
                       <p className="text-gray-600 text-lg leading-relaxed">
-                        - Phù hợp với những người nuôi Koi chưa có website, chưa có phần mềm quản lý dữ liệu Koi chuyên nghiệp.
+                        - Suitable for Koi keepers without a website or professional Koi data management software.
                       </p>
                       <p className="text-gray-600 text-lg leading-relaxed">
-                        - Đam mê nuôi Koi, tham gia các hội Koi trên diễn đàn xã hội nhưng thiếu địa điểm hoặc đang sửa chữa.
+                        - Passionate about Koi, active in Koi forums but lacking a space or undergoing repairs.
                       </p>
                       <p className="text-gray-600 text-lg leading-relaxed">
-                        - Ký gửi Koi để muốn nâng cấp Koi khác, thay đổi kế hoạch cá nhân.
+                        - Consign Koi for purposes such as upgrading or changing personal plans.
                       </p>
                     </div>
                   </div>
@@ -110,61 +110,56 @@ const Consignment: React.FC = () => {
 
                 <div className="bg-white shadow-lg rounded-lg p-8 mb-8">
                   <h2 id="section3" className="text-2xl font-bold text-red-800 mb-4">
-                    Chính sách ký gửi
+                    Consignment Policy
                   </h2>
                   <ul className="list-disc list-inside text-lg text-gray-700 leading-relaxed space-y-2">
-                    <li>Chụp ảnh và cung cấp video chi tiết về cá Koi.</li>
-                    <li>Cung cấp thông tin: Tên, tuổi, giới tính, nguồn gốc, chủng loại, tính cách, lượng thức ăn hàng ngày, các bệnh đã từng mắc (nếu có), và giấy chứng nhận.</li>
-                    <li>FKoi Shop có thể kiểm tra trực tiếp cá Koi (nếu thấy cần thiết).</li>
-                    <li>Thương thảo hợp đồng dựa trên yêu cầu và mức giá do khách hàng đưa ra.</li>
-                    <li>Ký hợp đồng và đảm bảo cá vẫn khỏe mạnh cho đến khi bán.</li>
-                    <li>FKoi Shop hỗ trợ khách hàng mua xem cá và chốt giao dịch.</li>
-                    <li>Khi cá được bán, hợp đồng kết thúc và người ký gửi chịu trách nhiệm về chất lượng cá sau khi bán.</li>
+                    <li>Provide photos and detailed videos of the Koi fish.</li>
+                    <li>Supply information: Name, age, gender, origin, species, personality, daily feeding volume, past diseases (if any), and certificate.</li>
+                    <li>FKoi Shop may inspect the Koi fish directly (if necessary).</li>
+                    <li>Negotiate a contract based on client’s price and requirements.</li>
+                    <li>Sign the contract and ensure fish remain healthy until sold.</li>
+                    <li>FKoi Shop assists clients with fish viewing and transaction closing.</li>
+                    <li>When sold, the contract ends and the consignor is responsible for the fish quality post-sale.</li>
                   </ul>
                 </div>
 
                 <div className="bg-white shadow-lg rounded-lg p-8 mb-8">
-                  <h2 id="section4" className="text-2xl font-bold text-red-800 mb-4">Ý nghĩa của việc ký gửi cá Koi</h2>
+                  <h2 id="section4" className="text-2xl font-bold text-red-800 mb-4">Significance of Koi Fish Consignment</h2>
                   <p className="text-lg text-gray-700 leading-relaxed">
-                    <b className="text-red-800 mb-4">Phổ biến tại Nhật Bản: </b>
-                    Đây là dịch vụ rất phổ biến tại Nhật Bản. 
-                    Khách mua Koi 1 em koi nhưng vì 1 lý do nào đó chưa thể đưa em ấy về nuôi, 
-                    khách ký gửi tại hồ nuôi. Phổ biến hơn là khách có Koi cần bán, 
-                    nhưng mạng lưới bán hàng không lớn, người nuôi Koi đưa Koi đến hồ nuôi,
-                    Koi farm lớn hơn ký gửi. Tại Nhật chi phí ký gửi Koi thường khá lớn. 
-                    Bao gồm nhiều các điều khoản ràng buộc, bồi thường.
+                    <b className="text-red-800 mb-4">Popular in Japan: </b>
+                    This is a very popular service in Japan. Customers may purchase a Koi fish but, for various reasons, are unable to take them home yet. 
+                    More commonly, those with Koi for sale, but a limited network, consign them to larger Koi farms. Consignment fees are usually significant 
+                    and include various binding and compensation terms.
                   </p>
 
                   <div className="my-8"></div>
 
                   <p className="text-lg text-gray-700 leading-relaxed">
-                    <b className="text-red-800 mb-4">Bắt đầu nở rộ tại Việt Nam: </b>
-                    Người chơi Koi muốn nâng cấp Koi, mở rộng hồ Koi, đàn Koi… 
-                    nhưng không đủ năng lực tìm người muốn mua koi của mình. 
-                    Vì vậy, họ tìm đến các dịch vụ kí gửi tại các Koi Farm lớn,
-                    có hồ nuôi chuyên nghiệp, được đông đảo người chơi Koi biết đến.
+                    <b className="text-red-800 mb-4">Gaining Popularity in Vietnam: </b>
+                    Koi enthusiasts looking to upgrade or expand their pond or Koi stock, but lacking buyer connections, turn to consignment services at large 
+                    Koi farms, known and respected within the Koi community.
                   </p>
                 </div>
 
                 <div className="bg-white shadow-lg rounded-lg p-8 mb-8">
-                  <h2 id="section5" className="text-2xl font-bold text-red-800 mb-4">FKoi shop cam kết</h2>
+                  <h2 id="section5" className="text-2xl font-bold text-red-800 mb-4">FKoi Shop Commitment</h2>
                   <ul className="list-disc list-inside text-lg text-gray-700 leading-relaxed space-y-2">
-                    <li>100% Koi F0 và F1 từ những trại nổi tiếng như Daihichi Koi Farm.</li>
-                    <li>Cá Koi đã được chọn lọc kỹ càng với tỷ lệ 300/10.000 con.</li>
-                    <li>Cung cấp đầy đủ kiến thức chăm sóc và thiết kế hồ cá trước khi bán Koi.</li>
-                    <li>Chỉ bán Koi khi hồ nuôi của khách hàng đạt chuẩn.</li>
-                    <li>Cam kết cung cấp hình ảnh và video chi tiết về nguồn gốc từng chú cá.</li>
-                    <li>Bồi thường gấp 10 lần giá trị cá nếu có vấn đề xảy ra.</li>
+                    <li>100% F0 and F1 Koi from renowned farms like Daihichi Koi Farm.</li>
+                    <li>Carefully selected Koi with a selection rate of 300 out of 10,000 fish.</li>
+                    <li>Comprehensive care knowledge and pond design guidance provided before Koi sales.</li>
+                    <li>Koi are only sold if the client’s pond meets standards.</li>
+                    <li>Detailed origin photos and videos for each fish.</li>
+                    <li>Compensation up to 10 times the fish’s value if issues arise.</li>
                   </ul>
                 </div>
 
                 <div className="text-center mt-8">
-                  <h2 className="text-2xl font-bold text-red-800 mb-4">Bắt đầu ký gửi cá Koi của bạn ngay hôm nay!</h2>
+                  <h2 className="text-2xl font-bold text-red-800 mb-4">Start Consigning Your Koi Fish Today!</h2>
                   <button
                     className="px-6 py-2 bg-red-800 text-white rounded-lg hover:bg-red-700 transition-colors text-lg"
                     onClick={handleConsignmentClick}
                   >
-                    Ký gửi ngay
+                    Consign Now
                   </button>
                 </div>
               </div>
