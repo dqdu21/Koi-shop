@@ -34,6 +34,7 @@ interface Product {
   isForSell: boolean;
   categoryId: string;
   imageUrl: string;
+  status?: string
 }
 
 interface Category {
@@ -146,7 +147,7 @@ const HomePage: React.FC = () => {
             </div>
             <Information />
             <div className="p-8">
-              {categories.map((category) => (
+              {categories.map((category) => category.products.length >0 ?
                 <section key={category.id} className="mt-10">
                   <div className="w-full flex justify-between mb-5">
                     <h1 className="font-bold text-xl">{category.name}</h1>
@@ -156,12 +157,14 @@ const HomePage: React.FC = () => {
                   </div>
                   {/* Change grid-cols-2 to grid-cols-4 for 4 products per row */}
                   <div className="grid grid-cols-4 gap-4">
-                    {category.products.map((product) => (
+                    {category.products.map((product) =>
+                    (product.status != "Deactive" &&  product.status != "InBatch") ?
                       <article
                         key={product.id}
                         className="rounded-md bg-slate-200 drop-shadow-md p-4"
                       >
                         <Link to={`/product/${product.id}`}>
+
                           <img
                             src={product.imageUrl} // Fetches image based on product ID
                             alt={product.name}
@@ -191,10 +194,11 @@ const HomePage: React.FC = () => {
                           Add to Cart
                         </button>
                       </article>
-                    ))}
+                    :  null)}
                   </div>
                 </section>
-              ))}
+                :null
+              )}
               <div className="w-full flex justify-between my-5">
                     <h1 className="font-bold text-xl">Batchs</h1>
                     {/* <a href="#" className="hover:text-amber-600 font-light">

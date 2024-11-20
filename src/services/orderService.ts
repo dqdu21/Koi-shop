@@ -47,3 +47,51 @@ export const getOrderHistory = async () => {
 //     return [];
 //   }
 // };
+
+export const GetAllOrder = async () => {
+  try {
+    const res = await axiosInstance.post("/order/admin/query", {
+      page: 1,
+      pageSize: 100,
+    });
+    return res.data;
+  } catch (err: any) {
+    console.error(err);
+  }
+};
+
+export const addOrder = async (data: any) => {
+  try {
+    const res = await axiosInstance.post("/order", data);
+    return res.data;
+  } catch (err: any) {
+    console.error(err);
+  }
+};
+
+export const deleteOrder = async (id: string) => {
+  try {
+    const res = await axiosInstance.delete(`/order/${id}`);
+    return res.data;
+  } catch (err: any) {
+    console.error(err);
+  }
+};
+
+export const updateOrder = async (orderId: string, data: any) => {
+  try {
+    const res = await axiosInstance.put(`/order/${orderId}`, data);
+    return res.data;
+  } catch (err: any) {
+    console.error(err);
+  }
+};
+
+export const getOrder = async (orderId: string) => {
+  try {
+    const res = await axiosInstance.get(`/order/${orderId}`);
+    return res.data;
+  } catch (err: any) {
+    console.error(err);
+  }
+};
