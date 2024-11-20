@@ -17,6 +17,7 @@ import ConsignmentDetail from './pages/ConsignmentDetail';
 import AdminConsignment from './pages/admin/consignment/AdminConsignment';
 import About from './pages/About';
 import Blog from './pages/Blog';
+import Batch from './pages/admin/batch/Batch';
 // import Orders from './pages/admin/order/order';
 
 const AppRouter = () => {
@@ -39,8 +40,10 @@ const AppRouter = () => {
                     {/* Admin Routes */}
         <Route path="/admin" element={<WelcomeAdmin />} />
         <Route path='/admin/product-manage' element={<Product />} />
+        <Route path='/admin/batch' element={<Batch />} />
+
         {/* <Route path="/admin/order" element={<Orders />} />  */}
-        <Route path="/admin/consignments" element={<AdminConsignment />} /> 
+        <Route path="/admin/consignments" element={<AdminConsignment />} />
 
                     {/* Staff Routes */}
         <Route path="/staff" element={<WelcomeStaff />} />

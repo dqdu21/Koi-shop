@@ -182,18 +182,6 @@ const KoiFishForm = ({handleSubmit, initialData} : {handleSubmit: (data:any) => 
   {/* <FormMessage>{form.formState.errors.gender?.message}</FormMessage> */}
 </FormItem>
 
-        {/* Inventory */}
-        <FormItem>
-          <FormLabel>Inventory</FormLabel>
-          <FormControl>
-            <Input
-              type="number"
-              {...form.register("inventory", { valueAsNumber: true })}
-              placeholder="0"
-            />
-          </FormControl>
-          <FormMessage>{form.formState.errors.inventory?.message}</FormMessage>
-        </FormItem>
 
         {/* Category ID */}
         <FormItem>

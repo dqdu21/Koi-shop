@@ -51,3 +51,15 @@ export const updateProduct = async (productId: string, data: any) => {
     console.error(err)
   }
 }
+
+export const getProduct = async (productId: string) => {
+  try {
+    const res = await axiosInstance.get(`/product/${productId}`
+
+    )
+    return res.data
+
+  } catch (err: any) {
+    console.error(err)
+  }
+}
