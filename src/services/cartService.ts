@@ -9,7 +9,12 @@ export const getCartsAPI = async (): Promise<CartResponse> => {
 
 
 export const addToCartAPI = async (cartId: string, productId: string) => {
-  const response = await axiosInstance.post(`/cart/${cartId}/product/add`, { productId });
+  const response = await axiosInstance.post(`/cart/${cartId}/product/${productId}/add`);
+  return response.data;
+}
+
+export const addBatchToCartAPI = async (cartId: string, batchId: string) => {
+  const response = await axiosInstance.post(`/cart/${cartId}/batch/${batchId}/add`);
   return response.data;
 }
 
@@ -53,12 +58,9 @@ export const deleteCartAPI = async (cartId: string): Promise<void> => {
 };
 
 
-export const removeProductFromCart = async (cartId: string, productId: string, quantity: number): Promise<void> => {
+export const removeProductFromCart = async (cartId: string, itemId: string): Promise<void> => {
   try {
-    await axiosInstance.post(`/cart/${cartId}/product/remove`, {
-      productId: productId,
-      quantity: quantity
-    });
+    await axiosInstance.post(`/cart/${cartId}/cart-item/${itemId}/remove`);
   } catch (error: any) {
     console.error(error.message)
   }

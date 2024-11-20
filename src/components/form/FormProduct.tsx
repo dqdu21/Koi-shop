@@ -198,7 +198,17 @@ const KoiFishForm = ({handleSubmit, initialData} : {handleSubmit: (data:any) => 
           </FormControl>
           <FormMessage>{form.formState.errors.categoryId?.message}</FormMessage>
         </FormItem>
-
+        <FormItem>
+          <FormLabel>Image Url</FormLabel>
+          <FormControl>
+            <Input
+              type="text"
+              {...form.register("imageUrl")}
+              placeholder="Image url"
+            />
+          </FormControl>
+          <FormMessage>{form.formState.errors.imageUrl?.message}</FormMessage>
+        </FormItem>
         {/* Submit Button */}
         <div className="flex justify-center">
         <Button type="submit" className="bg-green-600 text-white">Submit</Button>

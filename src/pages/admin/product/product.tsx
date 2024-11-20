@@ -6,9 +6,10 @@ import { useEffect, useState } from "react";
 import { Trash, Plus, Pen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import KoiFishForm from "@/components/form/FormProduct";
-import { addProduct, updateProduct } from "@/services/productService";
+import { addProduct, updateProduct, updateIsForSellProduct } from "@/services/productService";
 import { getCredentialByProductId, createCredential } from "@/services/credentialService";
 import CredentialForm from "@/components/form/FormCredential";
+import { Switch } from "@/components/ui/switch";
 
 const { Content } = Layout;
 import {
@@ -40,6 +41,7 @@ interface Product {
     name: string
     description: string
   }
+  isForSell: boolean
 }
 
 export default function Product() {
@@ -70,6 +72,10 @@ export default function Product() {
   const handleUpdate = async (data: any) => {
     await updateProduct(productSelected.id,data)
     setIsOpenUpdate(false);
+    fetchProduct()
+  }
+  const handleUpdateIsForSell = async (productId: string, isForSell: boolean) => {
+    const res = await updateIsForSellProduct(productId,isForSell);
     fetchProduct()
   }
   const handleDelete = async (id: string) => {
@@ -118,7 +124,8 @@ export default function Product() {
                 <TableHead>Weight</TableHead>
                 <TableHead>Description</TableHead>
                 <TableHead>Price</TableHead>
-                <TableHead className="">Chứng chỉ</TableHead>
+                <TableHead className="">Credential</TableHead>
+                <TableHead className="text-center">Is for sale?</TableHead>
                 <TableHead className="text-center"></TableHead>
 
               </TableRow>
@@ -149,6 +156,10 @@ export default function Product() {
 
 
                 </TableCell>
+                <TableCell className="text-center">
+                  <Switch checked={product.isForSell} onCheckedChange={() => handleUpdateIsForSell(product.id,!product.isForSell)}/>
+                </TableCell>
+
                 <TableCell className="flex justify-center gap-4">
                   <Trash className="cursor-pointer" onClick={() => handleDelete(product.id)}/>
                   <Pen className="cursor-pointer" onClick={() => {
@@ -178,6 +189,7 @@ export default function Product() {
           </div>
         </Content>
       </Layout>
+
     </Layout>
   )
 }

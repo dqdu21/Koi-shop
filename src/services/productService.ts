@@ -63,3 +63,14 @@ export const getProduct = async (productId: string) => {
     console.error(err)
   }
 }
+
+export const updateIsForSellProduct = async (productId: string, isForSell: boolean) => {
+  try {
+    const res = await axiosInstance.put(`/product/${productId}/is-for-sell?isForSell=${isForSell}`
+    )
+    return res.data
+
+  } catch (err: any) {
+    console.error(err)
+  }
+}

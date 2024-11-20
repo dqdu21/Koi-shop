@@ -72,7 +72,7 @@ const CartPage: React.FC = () => {
     let totalDiscount = 0;
 
     cartItems.forEach((item) => {
-      totalPrice = item.product.price*item.quantity + totalPrice; // Adjust based on your item structure
+      totalPrice = (item.product ? item.product.price : item.batch.price) + totalPrice; // Adjust based on your item structure
       // Assuming each cart item has a discount property
       totalDiscount += item.discount || 0;
     });
@@ -82,8 +82,8 @@ const CartPage: React.FC = () => {
     setPricePaid(totalPrice - totalDiscount);
   };
 
-  const removeItem = async (productId: string, quantity: number) => {
-      await removeProductFromCart(user.cartId,productId,quantity);
+  const removeItem = async (itemId: string) => {
+      await removeProductFromCart(user.cartId,itemId);
       fetchCartItems()
   }
 
