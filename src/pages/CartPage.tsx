@@ -35,7 +35,7 @@ const CartPage: React.FC = () => {
       const response = await getCartsAPI();
 
       if (response.isSuccess && response.result.data.length > 0) {
-        const cart = response.result.data[0]; // Get the first cart
+        const cart = response.result.data[response.result.data.length-1]; // Get the first cart
         setCartItems(cart.cartItems); // Get cart items from the response
         calculateCartSummary(cart.cartItems);
       } else {
