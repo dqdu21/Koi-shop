@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { addOrder, updateOrder } from "@/services/orderService";
 import CredentialForm from "@/components/form/FormCredential";
 import { Switch } from "@/components/ui/switch";
+import { type Order } from "@/models/order";
+import { updateOrderAccept, updateOrderCancel, updateOrderReturn } from "@/services/orderService";
 
 const { Content } = Layout;
 import {
@@ -27,20 +29,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 
-interface Order {
-  id:  string
-  name: string
-  description: string
-  weight: number
-  gender: string
-  price: number
-  credential: {
-    id: string
-    name: string
-    description: string
-  }
-  isForSell: boolean
-}
+
 
 export default function Order() {
   const [isOpen, setIsOpen] = useState(false);
@@ -86,10 +75,10 @@ export default function Order() {
             <TableHeader>
               <TableRow className="bg-slate-500 text-white">
                 <TableHead>Name</TableHead>
-                <TableHead>Gender</TableHead>
-                <TableHead>Weight</TableHead>
-                <TableHead>Description</TableHead>
-                <TableHead>Price</TableHead>
+                <TableHead>Phone</TableHead>
+                <TableHead>Total Price</TableHead>
+                <TableHead>Payment Method</TableHead>
+
 
 
                 <TableHead className="text-center"></TableHead>
@@ -99,21 +88,32 @@ export default function Order() {
             <TableBody>
               {
                 orders && orders.map(order =>
-                  <TableRow>
+                (order.status != "Canceled" &&  order.status != "Accepted")
+                &&
+                <TableRow>
                 <TableCell className="text-left">{order.contactName}</TableCell>
                 <TableCell className="text-left">{order.contactNumber}</TableCell>
-                <TableCell className="text-left">{order.weight}</TableCell>
-                <TableCell className="text-left">{order.description}</TableCell>
-                <TableCell className="text-left">{order.price}</TableCell>
+                <TableCell className="text-left">{order.totalPrice}</TableCell>
+                <TableCell className="text-left">{order.paymentMethod}</TableCell>
 
 
 
-                <TableCell className="flex justify-center gap-4">
+
+                <TableCell className="flex justify-center items-center gap-4">
                   <Trash className="cursor-pointer" onClick={() => handleDelete(order.id)}/>
-                  <Pen className="cursor-pointer" onClick={() => {
-                    setOrderSelected({...order, gender: order.gender == "Male" ? 1 : 0})
-                    setIsOpenUpdate(true)
-                    }}/>
+                  <Button className="bg-green-300 text-white" onClick={() => {
+                    updateOrderAccept(order.id)
+                    fetchOrder()
+                    }}>Accept</Button>
+                  <Button className="bg-red-300 text-white" onClick={() => {
+                    updateOrderCancel(order.id)
+                    fetchOrder()
+                  }
+                    }>Cancel</Button>
+                  <Button className="bg-gray-300 text-white" onClick={() => {
+                    updateOrderReturn(order.id)
+                    fetchOrder()
+                    }}>Return</Button>
 
                 </TableCell>
               </TableRow>

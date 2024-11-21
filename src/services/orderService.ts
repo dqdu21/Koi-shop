@@ -95,3 +95,35 @@ export const getOrder = async (orderId: string) => {
     console.error(err);
   }
 };
+
+export const updateOrderAccept = async (orderId: string) => {
+  try {
+    const res = await axiosInstance.put(`/order/${orderId}/is-accept`);
+    return res.data;
+  } catch (error:any) {
+    console.error(error);
+
+  }
+}
+
+export const updateOrderCancel = async (orderId: string) => {
+  try {
+    const res = await axiosInstance.put(`/order/${orderId}/cancel`);
+    return res.data;
+  } catch (error:any) {
+    console.error(error);
+
+  }
+}
+
+
+export const updateOrderReturn = async (orderId: string) => {
+  try {
+    const res = await axiosInstance.put(`/order/${orderId}/return`);
+    return res.data;
+  } catch (error:any) {
+    console.error(error);
+
+  }
+}
+
