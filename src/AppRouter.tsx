@@ -17,7 +17,7 @@ import ConsignmentDetail from './pages/ConsignmentDetail';
 import AdminConsignment from './pages/admin/consignment/AdminConsignment';
 import About from './pages/About';
 import Blog from './pages/Blog';
-import Batch from './pages/admin/batch/Batch';
+import Batch from './pages/admin/batch/batch';
 import Order from './pages/admin/order/order';
 // import Orders from './pages/admin/order/order';
 

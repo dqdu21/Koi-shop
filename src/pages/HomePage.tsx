@@ -158,7 +158,7 @@ const HomePage: React.FC = () => {
                   {/* Change grid-cols-2 to grid-cols-4 for 4 products per row */}
                   <div className="grid grid-cols-4 gap-4">
                     {category.products.map((product) =>
-                    (product.status != "Deactive" &&  product.status != "InBatch") ?
+                    (product.status != "Deactive" &&  product.status != "InBatch" && product.status != "SoldOut") ?
                       <article
                         key={product.id}
                         className="rounded-md bg-slate-200 drop-shadow-md p-4"
@@ -209,7 +209,7 @@ const HomePage: React.FC = () => {
 
             {
             batchs.map((batch: any) => (
-
+              (batch.status != "SoldOut" && batch.status!="Deactive") &&
                 <article
                   key={batch.id}
                   className="rounded-md bg-slate-200 drop-shadow-md p-4"

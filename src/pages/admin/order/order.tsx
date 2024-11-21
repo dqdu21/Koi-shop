@@ -88,8 +88,8 @@ export default function Order() {
             <TableBody>
               {
                 orders && orders.map(order =>
-                (order.status != "Canceled" &&  order.status != "Accepted")
-                &&
+
+
                 <TableRow>
                 <TableCell className="text-left">{order.contactName}</TableCell>
                 <TableCell className="text-left">{order.contactNumber}</TableCell>
@@ -100,6 +100,18 @@ export default function Order() {
 
 
                 <TableCell className="flex justify-center items-center gap-4">
+                 {
+                 (order.status== "Canceled") ?
+                 <div className="">
+                  Cancelled
+                 </div>
+                 :
+                 (order.status== "Accepted") ?
+                 <div className="">
+                 Accepted
+                </div>
+                :
+                  <>
                   <Trash className="cursor-pointer" onClick={() => handleDelete(order.id)}/>
                   <Button className="bg-green-300 text-white" onClick={() => {
                     updateOrderAccept(order.id)
@@ -114,6 +126,7 @@ export default function Order() {
                     updateOrderReturn(order.id)
                     fetchOrder()
                     }}>Return</Button>
+                    </>}
 
                 </TableCell>
               </TableRow>

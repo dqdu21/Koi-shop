@@ -98,7 +98,7 @@ export const getOrder = async (orderId: string) => {
 
 export const updateOrderAccept = async (orderId: string) => {
   try {
-    const res = await axiosInstance.put(`/order/${orderId}/is-accept`);
+    const res = await axiosInstance.put(`/order/${orderId}/is-accept?isAccept=true`);
     return res.data;
   } catch (error:any) {
     console.error(error);
