@@ -12,7 +12,6 @@ import AppSider from '../components/layout/AppSider';
 import { useSider } from '../app/context/SiderProvider';
 import { useAuth } from "../routes/AuthContext";
 import { payOrder } from '@/services/orderService';
-import { getAddressOwn } from '@/services/addressService';
 
 const CartPage: React.FC = () => {
   const [cartItems, setCartItems] = useState<CartItemType[]>([]);
@@ -20,20 +19,22 @@ const CartPage: React.FC = () => {
   const [price, setPrice] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [pricePaid, setPricePaid] = useState(0);
+  const [voucherCode, setVoucherCode] = useState(''); // Thêm state cho voucher
   const { collapsed } = useSider();
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
   const { isLoggedIn } = useAuth();
-  const { user} = useAuth()
+  const { user } = useAuth();
+
   useEffect(() => {
     if (isLoggedIn) {
-      setLoading(true);
+      fetchCartItems();
     }
   }, [isLoggedIn]);
+
   const fetchCartItems = async () => {
     setLoading(true);
     try {
       const response = await getCartsAPI();
-
       if (response.isSuccess && response.result.data.length > 0) {
         const cart = response.result.data[0]; // Get the first cart
         setCartItems(cart.cartItems); // Get cart items from the response
@@ -42,29 +43,10 @@ const CartPage: React.FC = () => {
         notification.info({ message: 'Info', description: 'No cart found.' });
       }
     } catch (error: any) {
-
+      console.error('Error fetching cart items:', error);
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-
-    fetchCartItems();
-  }, []);
-
-
-
-  const handleSelect = (id: string, selected: boolean) => {
-    setSelectedItems((prev) => {
-      const updatedSelectedItems = new Set(prev);
-      if (selected) {
-        updatedSelectedItems.add(id); // Add to selected items
-      } else {
-        updatedSelectedItems.delete(id); // Remove from selected items
-      }
-      return updatedSelectedItems;
-    });
   };
 
   const calculateCartSummary = (cartItems: CartItemType[]) => {
@@ -72,8 +54,7 @@ const CartPage: React.FC = () => {
     let totalDiscount = 0;
 
     cartItems.forEach((item) => {
-      totalPrice = item.product.price*item.quantity + totalPrice; // Adjust based on your item structure
-      // Assuming each cart item has a discount property
+      totalPrice += item.product.price * item.quantity;
       totalDiscount += item.discount || 0;
     });
 
@@ -82,17 +63,65 @@ const CartPage: React.FC = () => {
     setPricePaid(totalPrice - totalDiscount);
   };
 
+  const handleSelect = (id: string, selected: boolean) => {
+    setSelectedItems((prev) => {
+      const updatedSelectedItems = new Set(prev);
+      if (selected) {
+        updatedSelectedItems.add(id);
+      } else {
+        updatedSelectedItems.delete(id);
+      }
+      return updatedSelectedItems;
+    });
+  };
+
   const removeItem = async (productId: string, quantity: number) => {
-      await removeProductFromCart(user.cartId,productId,quantity);
-      fetchCartItems()
-  }
+    try {
+      await removeProductFromCart(user.cartId, productId, quantity);
+      fetchCartItems();
+    } catch (error) {
+      console.error('Error removing item:', error);
+    }
+  };
 
-  const handlePay = async ()  => {
+  const handlePay = async () => {
+    try {
+      const res = await payOrder(user.cartId);
+      window.location.href = res.result.data.paymentUrl;
+      fetchCartItems();
+    } catch (error) {
+      console.error('Error processing payment:', error);
+    }
+  };
 
-    const res = await payOrder(user.cartId);
-    window.location.href = res.result.data.paymentUrl
-    fetchCartItems()
-  }
+  const handleApplyVoucher = async (voucherCode: string) => {
+    try {
+      // Gọi API áp dụng mã voucher
+      const response = await fetch('/api/voucher/apply', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          voucherCode,
+          cartId: user.cartId,
+        }),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        notification.success({ message: 'Voucher applied successfully!' });
+        setDiscount(result.discountAmount);
+        setPricePaid(price - result.discountAmount);
+      } else {
+        notification.error({ message: 'Failed to apply voucher.', description: result.message });
+      }
+    } catch (error) {
+      console.error('Error applying voucher:', error);
+      notification.error({ message: 'Error applying voucher.' });
+    }
+  };
+
   return (
     <Layout className="h-screen w-screen flex flex-col">
       <Header className="header">
@@ -108,43 +137,41 @@ const CartPage: React.FC = () => {
               <h1 className="text-2xl font-bold mb-6">Your Cart</h1>
 
               {loading ? (
-        <p>Loading...</p>
-      ) : !isLoggedIn ? (
-        <div>
-          <p>Please sign in to view your cart.</p>
-        </div>
-      ) : cartItems.length === 0 ? (
-        <p>Your cart is empty</p>
-      ) : (
-        <>
+                <p>Loading...</p>
+              ) : !isLoggedIn ? (
+                <div>
+                  <p>Please sign in to view your cart.</p>
+                </div>
+              ) : cartItems.length === 0 ? (
+                <p>Your cart is empty</p>
+              ) : (
+                <>
                   <div className="mb-6">
-
-                      <div className='grid grid-cols-[2fr_1fr] gap-4'>
-                        <div className="">
-                        {cartItems.map((item) => ( <CartItem
-                        key={item.id}
-                        item={item}
-                        onRemove={removeItem} // Ensure you implement this
-                        isSelected={selectedItems.has(item.id)} // Ensure selectedItems is defined
-                        onSelect={handleSelect} // Ensure you implement this
-                      />  ))}
-                        </div>
-
-                      <CartSummary
-                    price_paid={pricePaid}
-                    price={price}
-                    discount={discount}
-                    cartItems={cartItems} // Ensure CartSummary can handle this prop
-                    selectedItems={selectedItems} // Ensure selectedItems is defined
-                     // Ensure you implement this
-                    onSelect={handleSelect} // Ensure you implement this
-                    onPay={() => handlePay()}
-                  />
+                    <div className="grid grid-cols-[2fr_1fr] gap-4">
+                      <div>
+                        {cartItems.map((item) => (
+                          <CartItem
+                            key={item.id}
+                            item={item}
+                            onRemove={removeItem}
+                            isSelected={selectedItems.has(item.id)}
+                            onSelect={handleSelect}
+                          />
+                        ))}
                       </div>
 
+                      <CartSummary
+                        price_paid={pricePaid}
+                        price={price}
+                        discount={discount}
+                        cartItems={cartItems}
+                        selectedItems={selectedItems}
+                        onSelect={handleSelect}
+                        onPay={handlePay}
+                        onApplyVoucher={handleApplyVoucher} // Truyền hàm áp dụng voucher
+                      />
+                    </div>
                   </div>
-
-
                 </>
               )}
             </div>
