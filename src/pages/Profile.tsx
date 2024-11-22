@@ -37,9 +37,10 @@ const Profile: React.FC = () => {
   const [rating, setRating] = useState(0);
   const fetchListProductBuy = async() => {
     const res = await getOrderHistory()
-    const allProducts = res?.flatMap((order: any) => 
-      order?.orderItems?.map((item: any) => item.product)
+    const allProducts = res?.flatMap((order: any) =>
+      order?.orderItems?.map((item: any) => item.product ? item.product : item.batch)
     );
+
     setListProductBuy(allProducts)
   }
   const fetchProfile = async () => {
@@ -70,7 +71,7 @@ const Profile: React.FC = () => {
           description: "Edit FeedBack Failed.",
         })
       }
-      setIsModalVisible1(false); 
+      setIsModalVisible1(false);
       setIdProductBuy("");
     }else{
       if(idProductBuy===""){
@@ -92,13 +93,14 @@ const Profile: React.FC = () => {
             description: "You have already feedback on this product.",
           })
         }
-        setIsModalVisible1(false); 
+        setIsModalVisible1(false);
         setReload(!reload);
         setIdProductBuy("");
       }
     }
   };
   const handleAddFeedback = () =>{
+    console.log('Check: ');
     setIsEditing(false);
     setDescription('');
     setRating(0);
@@ -106,12 +108,12 @@ const Profile: React.FC = () => {
   }
   const handleEdit = (id: string) => {
     setIdProductBuy(id);
-    setIsEditing(true);   
+    setIsEditing(true);
     const feedbackToEdit = feedbackList.find(feedback => feedback.id === id);
     if (feedbackToEdit) {
       setDescription(feedbackToEdit.description);
       setRating(feedbackToEdit.rating);
-      setIsModalVisible1(true); 
+      setIsModalVisible1(true);
     }
   };
   const handleCancelEdit = () => {
@@ -360,7 +362,7 @@ const Profile: React.FC = () => {
                 title={isEditing ? "Edit Feedback" : "Add Feedback"}
                 open={isModalVisible1}
                 onCancel={handleCancelEdit}
-                onOk={handleSave} 
+                onOk={handleSave}
                 okText="Save"
                 cancelText="Cancel"
               >
@@ -393,11 +395,12 @@ const Profile: React.FC = () => {
                           dataSource={listProductBuy}
                           renderItem={(product) => (
                             <List.Item
+                            key={product.id}
                               actions={[
-                                <Button 
-                                  type="primary" 
-                                  size="small" 
-                                  onClick={() => setIdProductBuy(product.id)}  
+                                <Button
+                                  type="primary"
+                                  size="small"
+                                  onClick={() => setIdProductBuy(product.id)}
                                   disabled={product.id===idProductBuy}
                                 >
                                   Select
@@ -414,7 +417,7 @@ const Profile: React.FC = () => {
                         />
                       </div>
                     </div>
-                
+
                   }
                 </div>
               </Modal>

@@ -78,9 +78,9 @@ export default function Shipment() {
             <Table>
             <TableHeader>
               <TableRow className="bg-slate-500 text-white">
-                <TableHead>Name</TableHead>
-                <TableHead>Phone</TableHead>
-                <TableHead>Total Price</TableHead>
+                <TableHead>OrderId</TableHead>
+                <TableHead></TableHead>
+                <TableHead></TableHead>
                 <TableHead>Payment Method</TableHead>
 
 

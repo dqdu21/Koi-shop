@@ -82,10 +82,10 @@ export const updateShipmentReturn = async (shipmentId: string) => {
 
 export const createShipment = async (orderId: string) => {
   try {
-    const res = await axiosInstance.post(`/shipment`, {
+    const res = await axiosInstance.post(`/shipment`, null, {params: {
       orderId: orderId,
       shipperId: "00000000-0000-0000-0000-000000000001"
-    });
+    }});
     return res.data;
   } catch (error:any) {
     console.error(error);

@@ -10,7 +10,7 @@ import CredentialForm from "@/components/form/FormCredential";
 import { Switch } from "@/components/ui/switch";
 import { type Order } from "@/models/order";
 import { updateOrderAccept, updateOrderCancel, updateOrderReturn } from "@/services/orderService";
-
+import { createShipment } from "@/services/shipmentService";
 const { Content } = Layout;
 import {
   Table,
@@ -58,6 +58,10 @@ export default function Order() {
 
   const handleDelete = async (id: string) => {
     await deleteOrder(id);
+    fetchOrder()
+  }
+  const handleCreateShipment = async (orderId: string) => {
+    await createShipment(orderId);
     fetchOrder()
   }
 
@@ -108,7 +112,9 @@ export default function Order() {
                  :
                  (order.status== "Accepted") ?
                  <div className="">
-                 Accepted
+                 <Button onClick={() => handleCreateShipment(order.id)}>
+                  Ship
+                 </Button>
                 </div>
                 :
                   <>
