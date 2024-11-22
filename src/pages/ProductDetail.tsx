@@ -20,6 +20,7 @@ import { useSider } from "../app/context/SiderProvider";
 import { createCartAPI } from "@/services/cartService";
 import { useAuth } from "../routes/AuthContext";
 
+
 interface Product {
   id: string;
   name: string;

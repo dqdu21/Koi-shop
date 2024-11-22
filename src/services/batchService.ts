@@ -45,3 +45,12 @@ export const updateBatch = async (batchId: string, data: any) => {
     console.error(err)
   }
 }
+
+export const getBatch = async (batchId: string) => {
+  try {
+    const res = await axiosInstance.get(`/batch/${batchId}`)
+    return res.data
+  } catch (err:any) {
+    console.error(err)
+  }
+}

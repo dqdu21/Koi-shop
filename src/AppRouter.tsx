@@ -19,6 +19,8 @@ import About from './pages/About';
 import Blog from './pages/Blog';
 import Batch from './pages/admin/batch/batch';
 import Order from './pages/admin/order/order';
+import BatchDetail from './pages/BatchDetail';
+import Shipment from './pages/admin/shipment/shipment';
 // import Orders from './pages/admin/order/order';
 
 const AppRouter = () => {
@@ -34,6 +36,8 @@ const AppRouter = () => {
         <Route path="/profile" element={<Profile/>} />
         <Route path="about" element={<About />} />
         <Route path="blog" element={<Blog />} />
+        <Route path="batch/:batchID" element={<BatchDetail />} />
+
         <Route path="/consignment-form" element={<ConsignmentForm/>} />
         <Route path="/consignment-list" element={<ConsignmentList/>} />
         <Route path="/consignment/:consignmentId" element={<ConsignmentDetail />} />
@@ -43,6 +47,7 @@ const AppRouter = () => {
         <Route path='/admin/product-manage' element={<Product />} />
         <Route path='/admin/manage-orders' element={<Order />} />
         <Route path='/admin/batch' element={<Batch />} />
+        <Route path='/admin/shipment' element={<Shipment />} />
 
         {/* <Route path="/admin/order" element={<Orders />} />  */}
         <Route path="/admin/consignments" element={<AdminConsignment />} />
