@@ -6,7 +6,8 @@ export interface CartItem {
     totalPrice: number; // Assuming the cart item has a total price
     discount?: number;
     quantity: number;
-    product: any;
+    product?: any;
+    batch?: any;
     // Add other properties as necessary based on your API response
   }
 

@@ -83,8 +83,8 @@ export default function OrderHistory() {
                           }}
                         />
                         <div className="">
-                          <h2 className="font-semibold">{item.product.name}</h2>
-                          <p>Quantity: {item.quantity}</p>
+                          <h2 className="font-semibold">{item.product ? item.product.name : item.batch.name}</h2>
+                          {/* <p>Quantity: {item.quantity}</p> */}
                           <p>
                             Total:{" "}
                             {(

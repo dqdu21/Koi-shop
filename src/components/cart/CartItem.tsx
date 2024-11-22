@@ -5,7 +5,7 @@ import { Trash } from 'lucide-react';
 
 interface CartItemProps {
   item: CartItemType;
-  onRemove: (productId: string, quantity: number) => void;
+  onRemove: (itemId: string) => void;
   isSelected: boolean;
   onSelect: (id: string, selected: boolean) => void;
 }
@@ -18,20 +18,21 @@ const CartItem: React.FC<CartItemProps> = ({ item, onRemove, isSelected, onSelec
   return (
     <Card className="px-8 py-4 my-2 grid grid-cols-[1fr_4fr_1fr] gap-2">
       <img
-        src={`https://koifarmshop.site/api/media/product/${item.productId}`}
-        className="w-32 h-auto rounded-md"
-        alt={item.product.name}
+        src={`https://koifarmshop.site/api/media/product/${item.productId}`} // Fetches image based on product ID
+
+        className="w-32 h-auto rounded-md" // Optional: style for image
         onError={(e) => {
           e.currentTarget.src =
             "https://esuhai.vn/upload/fck_new/image/4Nursery/SONG%20&%20LV%20TAI%20NB/2022/T5/van-hoa-nhat-ban-esuhai-kaizen-ca-koi-2.jpg";
         }}
       />
-      <div>
-        <h2 className="font-semibold">{item.product.name}</h2>
-        <p>Quantity: {item.quantity}</p>
-        <p>Total: {(item.product.price * item.quantity).toLocaleString('vi-vn')}</p>
+      <div className="">
+
+      <h2 className="font-semibold">{item.product.name}</h2>
+      <p>Quantity: {item.quantity}</p>
+      <p>Total: {(item.product.price*item.quantity).toLocaleString('vi-vn')}</p>
       </div>
-      <div className="flex justify-end items-center cursor-pointer" onClick={() => onRemove(item.productId, item.quantity)}>
+      <div className="flex justify-end items-center cursor-pointer" onClick={() => onRemove(item.id)}>
         <Trash />
       </div>
 

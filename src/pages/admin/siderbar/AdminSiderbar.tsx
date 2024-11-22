@@ -3,7 +3,8 @@ import {
   SettingOutlined,
   ShoppingOutlined,
   UserOutlined,
-  ProductFilled
+  ProductFilled,
+  DropboxOutlined
 } from "@ant-design/icons";
 import { ContrastOutlined, HomeMiniOutlined } from "@mui/icons-material";
 import { Layout, Menu } from "antd";
@@ -32,6 +33,9 @@ const AdminSidebar = () => {
         </Menu.Item>
         <Menu.Item key="product" icon={<ProductFilled />}>
           <Link to="/admin/product-manage">Manage Products</Link>
+        </Menu.Item>
+        <Menu.Item key="product" icon={<DropboxOutlined />}>
+          <Link to="/admin/batch">Manage Batch</Link>
         </Menu.Item>
         <Menu.Item key="consign" icon={<ContrastOutlined />}>
           <Link to="/admin/consignments">Manage Consignments</Link>

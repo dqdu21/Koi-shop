@@ -14,7 +14,7 @@ export const productSchema = z.object({
   feedingVolumn: z.string(),
   filterRate: z.number().min(0),
   gender: z.number().min(0).max(1, { message: "Gender must be 0 (Female) or 1 (Male)" }),
-  inventory: z.number(),
-  categoryId: z.string()
+  categoryId: z.string(),
+  imageUrl: z.string(),
 });
 

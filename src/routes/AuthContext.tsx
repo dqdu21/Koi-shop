@@ -93,7 +93,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const getUserCurrent = async (token:any) => {
     const res = await getCurrentLogin(token);
     const response = await getCartsAPI()
-    let cart = response.result.data[0]
+    let cart = response.result ? response.result.data[response.result.data.length-1] : response.result
     if (!cart) {
       console.log('Test');
       await createCartAPI({

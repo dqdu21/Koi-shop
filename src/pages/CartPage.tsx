@@ -36,7 +36,7 @@ const CartPage: React.FC = () => {
     try {
       const response = await getCartsAPI();
       if (response.isSuccess && response.result.data.length > 0) {
-        const cart = response.result.data[0]; // Get the first cart
+        const cart = response.result.data[response.result.data.length-1]; // Get the first cart
         setCartItems(cart.cartItems); // Get cart items from the response
         calculateCartSummary(cart.cartItems);
       } else {
@@ -54,7 +54,8 @@ const CartPage: React.FC = () => {
     let totalDiscount = 0;
 
     cartItems.forEach((item) => {
-      totalPrice += item.product.price * item.quantity;
+      totalPrice = item.product.price*item.quantity + totalPrice; // Adjust based on your item structure
+      // Assuming each cart item has a discount property
       totalDiscount += item.discount || 0;
     });
 
@@ -76,13 +77,9 @@ const CartPage: React.FC = () => {
   };
 
   const removeItem = async (productId: string, quantity: number) => {
-    try {
-      await removeProductFromCart(user.cartId, productId, quantity);
-      fetchCartItems();
-    } catch (error) {
-      console.error('Error removing item:', error);
-    }
-  };
+      await removeProductFromCart(user.cartId,productId,quantity);
+      fetchCartItems()
+  }
 
   const handlePay = async () => {
     try {

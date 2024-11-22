@@ -13,8 +13,9 @@ import slider_3 from "../assets/Images/slider3.png";
 import { axiosInstance } from "../services/axiosInstance";
 import { useEffect, useState } from "react";
 import Information from "./Information";
-import { addToCartAPI, createCartAPI } from "../services/cartService";
+import { addToCartAPI, createCartAPI, addBatchToCartAPI } from "../services/cartService";
 import { useAuth } from "../routes/AuthContext";
+import { GetAllBatch } from "@/services/batchService";
 
 interface Product {
   id: string;
@@ -32,6 +33,8 @@ interface Product {
   inventory: number;
   isForSell: boolean;
   categoryId: string;
+  imageUrl: string;
+  status?: string
 }
 
 interface Category {
@@ -55,8 +58,14 @@ const HomePage: React.FC = () => {
 
   const { collapsed } = useSider();
   const [categories, setCategories] = useState<Category[]>([]);
+  const [batchs,setBatchs] = useState([])
+  const fetchBatchs = async () => {
+    const res = await GetAllBatch();
+    setBatchs(res.result.data);
+  }
   const { user} = useAuth()
   useEffect(() => {
+    fetchBatchs()
     const fetchCategories = async () => {
       try {
         const response = await axiosInstance.get(
@@ -80,18 +89,16 @@ const HomePage: React.FC = () => {
           status: 1
         })
       }
-       const response = await axiosInstance.post(
-        `https://koifarmshop.site/api/cart/${cartId}/product/add`,
-        {
-          productId: product.id, // Adjust based on API requirements
-          quantity: 1,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json", // Ensure proper content type
-          },
-        }
-      );
+      //  const response = await axiosInstance.post(
+      //   `https://koifarmshop.site/api/cart/${cartId}/product/${product.id}/add`
+      //   ,{},
+      //   {
+      //     headers: {
+      //       "Content-Type": "application/json", // Ensure proper content type
+      //     },
+      //   }
+      // );
+      const res = await addToCartAPI(cartId,product.id)
       notification.success({
         message: "Success",
         description: "Product added to cart.",
@@ -105,6 +112,16 @@ const HomePage: React.FC = () => {
       });
     }
   };
+
+  const handleAddBatchToCart = async (batchId: string) => {
+    const cartId =  user.cartId
+    const res = await addBatchToCartAPI(cartId,batchId);
+    notification.success({
+      message: "Success",
+      description: "Product added to cart.",
+    });
+
+  }
 
   return (
     <Layout className="h-screen w-screen flex flex-col">
@@ -130,7 +147,7 @@ const HomePage: React.FC = () => {
             </div>
             <Information />
             <div className="p-8">
-              {categories.map((category) => (
+              {categories.map((category) => category.products.length >0 ?
                 <section key={category.id} className="mt-10">
                   <div className="w-full flex justify-between mb-5">
                     <h1 className="font-bold text-xl">{category.name}</h1>
@@ -140,14 +157,16 @@ const HomePage: React.FC = () => {
                   </div>
                   {/* Change grid-cols-2 to grid-cols-4 for 4 products per row */}
                   <div className="grid grid-cols-4 gap-4">
-                    {category.products.map((product) => (
+                    {category.products.map((product) =>
+                    (product.status != "Deactive" &&  product.status != "InBatch" && product.status != "SoldOut") ?
                       <article
                         key={product.id}
                         className="rounded-md bg-slate-200 drop-shadow-md p-4"
                       >
                         <Link to={`/product/${product.id}`}>
+
                           <img
-                            src={`https://koifarmshop.site/api/media/product/${product.id}`} // Fetches image based on product ID
+                            src={product.imageUrl} // Fetches image based on product ID
                             alt={product.name}
                             className="w-full h-auto rounded-md" // Optional: style for image
                             onError={(e) => {
@@ -175,10 +194,58 @@ const HomePage: React.FC = () => {
                           Add to Cart
                         </button>
                       </article>
-                    ))}
+                    :  null)}
                   </div>
                 </section>
-              ))}
+                :null
+              )}
+              <div className="w-full flex justify-between my-5">
+                    <h1 className="font-bold text-xl">Batchs</h1>
+                    {/* <a href="#" className="hover:text-amber-600 font-light">
+                      See all
+                    </a> */}
+                 </div>
+               <div className="grid grid-cols-4 gap-4">
+
+            {
+            batchs.map((batch: any) => (
+              (batch.status != "SoldOut" && batch.status!="Deactive") &&
+                <article
+                  key={batch.id}
+                  className="rounded-md bg-slate-200 drop-shadow-md p-4"
+                >
+                  <Link to={`/product/${batch.id}`}>
+                    <img
+                      src={`https://koifarmshop.site/api/media/product/${batch.id}`} // Fetches image based on product ID
+                      alt={batch.name}
+                      className="w-full h-auto rounded-md" // Optional: style for image
+                      onError={(e) => {
+                        e.currentTarget.src =
+                          "https://esuhai.vn/upload/fck_new/image/4Nursery/SONG%20&%20LV%20TAI%20NB/2022/T5/van-hoa-nhat-ban-esuhai-kaizen-ca-koi-2.jpg"; // Fallback image if loading fails
+                      }}
+                    />
+                  </Link>
+                  <div className="flex justify-between my-3">
+                    <h3 className="font-semibold">{batch.name}</h3>
+                    <i className="fa-solid fa-ellipsis-vertical cursor-pointer"></i>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <p className="text-xs">
+                      By <span className="font-medium">Koi Farm</span>
+                    </p>
+
+
+
+                  </div>
+                  <button
+                    onClick={() => handleAddBatchToCart(batch.id)}
+                    className="bg-red-600 text-white py-1 px-3 rounded"
+                  >
+                    Add to Cart
+                  </button>
+                </article>
+            ))}
+          </div>
             </div>
 
             <Footer className="footer mt-auto">
