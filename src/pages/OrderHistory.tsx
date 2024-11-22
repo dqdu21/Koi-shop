@@ -75,7 +75,7 @@ export default function OrderHistory() {
                         onClick={() => navigate(`/product/${item.productId}`)}
                       >
                         <img
-                          src={`https://koifarmshop.site/api/media/product/${item.productId}`} // Fetches image based on product ID
+                          src={item.product ? item.product.imageUrl : ""} // Fetches image based on product ID
                           className="w-32 h-auto rounded-md" // Optional: style for image
                           onError={(e) => {
                             e.currentTarget.src =
@@ -88,7 +88,7 @@ export default function OrderHistory() {
                           <p>
                             Total:{" "}
                             {(
-                              item.product.price * item.quantity
+                              (item.product ? item.product.price : item.batch.price)
                             ).toLocaleString("vi-vn")}
                           </p>
                         </div>

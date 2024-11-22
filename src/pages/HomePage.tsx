@@ -214,7 +214,7 @@ const HomePage: React.FC = () => {
                   key={batch.id}
                   className="rounded-md bg-slate-200 drop-shadow-md p-4"
                 >
-                  <Link to={`/product/${batch.id}`}>
+                  <Link to={`/batch/${batch.id}`}>
                     <img
                       src={`https://koifarmshop.site/api/media/product/${batch.id}`} // Fetches image based on product ID
                       alt={batch.name}

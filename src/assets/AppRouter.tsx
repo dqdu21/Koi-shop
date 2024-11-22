@@ -12,6 +12,7 @@ import Profile from './pages/Profile';
 import ConsignmentList from './pages/ConsignmentList';
 import ConsignmentDetail from './pages/ConsignmentDetail';
 import About from './pages/About';
+import BatchDetail from '@/pages/BatchDetail';
 
 const AppRouter = () => {
   return (
@@ -24,6 +25,7 @@ const AppRouter = () => {
         <Route path="cart" element={<CartPage />} />
         <Route path="/consignment" element={<Consignment/>} />
         <Route path="/profile" element={<Profile/>} />
+        <Route path="/batch/:batchID" element={<BatchDetail />} />
         <Route path="/product/:productID" element={<ProductDetail />} />
         <Route path="/consignment-form" element={<ConsignmentForm/>} />
         <Route path="/consignments" element={<ConsignmentList/>} />
