@@ -184,8 +184,7 @@ const HomePage: React.FC = () => {
                             By <span className="font-medium">Koi Farm</span>
                           </p>
 
-                          <span>{product.inventory} in stock</span>
-                          <span>${product.price}</span>
+                          <span>{product.price} VND</span>
                         </div>
                         <button
                           onClick={() => handleAddToCart(product)}
