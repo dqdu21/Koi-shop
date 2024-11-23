@@ -24,6 +24,7 @@ import AdminPromotionPage from './pages/admin/promotion/AdminPromotionPage';
 import AdminPromotionList from './pages/admin/promotion/AdminPromotionList';
 import EditPromotion from './pages/admin/promotion/EditPromotion';
 import BatchDetail from './pages/BatchDetail';
+import PromotionDetails from './pages/admin/promotion/PromotionDetails';
 // import Orders from './pages/admin/order/order';
 
 const AppRouter = () => {
