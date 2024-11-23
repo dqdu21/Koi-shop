@@ -92,7 +92,7 @@ const BatchDetail: React.FC = () => {
       notification.error({
         message: "Error",
         description: "Could not add batch to cart.",
-      });
+      }); 
     }
   };
 
@@ -174,7 +174,7 @@ const BatchDetail: React.FC = () => {
 
                 <div className="mb-4 flex items-center">
                   <span className="text-3xl font-semibold text-red-600 mr-4">
-                    ${batch.price.toFixed(2)}
+                    {batch.price.toFixed(2)} VND
                   </span>
 
 
