@@ -1,16 +1,15 @@
 import { Layout, Typography } from "antd";
 import AdminHeader from "../header/AdminHeader";
 import AdminSidebar from "../siderbar/AdminSiderbar";
-import { GetAllOrder, deleteOrder } from "@/services/orderService";
+import { GetAllShipment, deleteShipment } from "@/services/shipmentService";
 import { useEffect, useState } from "react";
 import { Trash, Plus, Pen } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { addOrder, updateOrder } from "@/services/orderService";
+import { addShipment, updateShipment } from "@/services/shipmentService";
 import CredentialForm from "@/components/form/FormCredential";
 import { Switch } from "@/components/ui/switch";
-import { type Order } from "@/models/order";
-import { updateOrderAccept, updateOrderCancel, updateOrderReturn } from "@/services/orderService";
-import { createShipment } from "@/services/shipmentService";
+import { updateShipmentAccept, updateShipmentCancel, updateShipmentReturn } from "@/services/shipmentService";
+
 const { Content } = Layout;
 import {
   Table,
@@ -29,40 +28,41 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 
+interface Shipment {
+  id: string
+  order: []
+  orderId: string
+  status: string
+}
 
-
-export default function Order() {
+export default function Shipment() {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenUpdate,setIsOpenUpdate] = useState(false)
   const [isOpenCredential, setIsOpenCredential] = useState(false)
-  const [orders,setOrders] = useState<Order[]>([])
-  const [orderSelected,setOrderSelected] = useState<any>()
-  const fetchOrder = async () => {
-    const res = await GetAllOrder();
+  const [shipments,setShipments] = useState<Shipment[]>([])
+  const [shipmentSelected,setShipmentSelected] = useState<any>()
+  const fetchShipment = async () => {
+    const res = await GetAllShipment();
     console.log('Check: ', res.result.data);
-    setOrders(res.result.data);
+    setShipments(res.result.data);
   }
   useEffect(() => {
-    fetchOrder()
+    fetchShipment()
   }, [])
   const handleAdd = async (data:any) => {
-    await addOrder(data);
+    await addShipment(data);
     setIsOpen(false)
-    fetchOrder()
+    fetchShipment()
   }
   const handleUpdate = async (data: any) => {
-    await updateOrder(orderSelected.id,data)
+    await updateShipment(shipmentSelected.id,data)
     setIsOpenUpdate(false);
-    fetchOrder()
+    fetchShipment()
   }
 
   const handleDelete = async (id: string) => {
-    await deleteOrder(id);
-    fetchOrder()
-  }
-  const handleCreateShipment = async (orderId: string) => {
-    await createShipment(orderId);
-    fetchOrder()
+    await deleteShipment(id);
+    fetchShipment()
   }
 
   return (
@@ -78,9 +78,9 @@ export default function Order() {
             <Table>
             <TableHeader>
               <TableRow className="bg-slate-500 text-white">
-                <TableHead>Name</TableHead>
-                <TableHead>Phone</TableHead>
-                <TableHead>Total Price</TableHead>
+                <TableHead>OrderId</TableHead>
+                <TableHead></TableHead>
+                <TableHead></TableHead>
                 <TableHead>Payment Method</TableHead>
 
 
@@ -91,46 +91,44 @@ export default function Order() {
             </TableHeader>
             <TableBody>
               {
-                orders && orders.map(order =>
+                shipments && shipments.map(shipment =>
 
 
                 <TableRow>
-                <TableCell className="text-left">{order.contactName}</TableCell>
-                <TableCell className="text-left">{order.contactNumber}</TableCell>
-                <TableCell className="text-left">{order.totalPrice}</TableCell>
-                <TableCell className="text-left">{order.paymentMethod}</TableCell>
+                {/* <TableCell className="text-left">{shipment.contactName}</TableCell>
+                <TableCell className="text-left">{shipment.contactNumber}</TableCell>
+                <TableCell className="text-left">{shipment.totalPrice}</TableCell>
+                <TableCell className="text-left">{shipment.paymentMethod}</TableCell> */}
 
 
 
 
                 <TableCell className="flex justify-center items-center gap-4">
                  {
-                 (order.status== "Canceled") ?
+                 (shipment.status== "Canceled") ?
                  <div className="">
                   Cancelled
                  </div>
                  :
-                 (order.status== "Accepted") ?
+                 (shipment.status== "Accepted") ?
                  <div className="">
-                 <Button onClick={() => handleCreateShipment(order.id)}>
-                  Ship
-                 </Button>
+                 Accepted
                 </div>
                 :
                   <>
-                  <Trash className="cursor-pointer" onClick={() => handleDelete(order.id)}/>
+                  <Trash className="cursor-pointer" onClick={() => handleDelete(shipment.id)}/>
                   <Button className="bg-green-300 text-white" onClick={() => {
-                    updateOrderAccept(order.id)
-                    fetchOrder()
+                    updateShipmentAccept(shipment.id)
+                    fetchShipment()
                     }}>Accept</Button>
                   <Button className="bg-red-300 text-white" onClick={() => {
-                    updateOrderCancel(order.id)
-                    fetchOrder()
+                    updateShipmentCancel(shipment.id)
+                    fetchShipment()
                   }
                     }>Cancel</Button>
                   <Button className="bg-gray-300 text-white" onClick={() => {
-                    updateOrderReturn(order.id)
-                    fetchOrder()
+                    updateShipmentReturn(shipment.id)
+                    fetchShipment()
                     }}>Return</Button>
                     </>}
 
@@ -145,7 +143,7 @@ export default function Order() {
 
   <DialogContent className="bg-white">
     <DialogHeader>
-      <DialogTitle>Chỉnh sửa order</DialogTitle>
+      <DialogTitle>Chỉnh sửa shipment</DialogTitle>
 
 
 

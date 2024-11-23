@@ -184,8 +184,7 @@ const HomePage: React.FC = () => {
                             By <span className="font-medium">Koi Farm</span>
                           </p>
 
-                          <span>{product.inventory} in stock</span>
-                          <span>${product.price}</span>
+                          <span>{product.price} VND</span>
                         </div>
                         <button
                           onClick={() => handleAddToCart(product)}
@@ -214,7 +213,7 @@ const HomePage: React.FC = () => {
                   key={batch.id}
                   className="rounded-md bg-slate-200 drop-shadow-md p-4"
                 >
-                  <Link to={`/product/${batch.id}`}>
+                  <Link to={`/batch/${batch.id}`}>
                     <img
                       src={`https://koifarmshop.site/api/media/product/${batch.id}`} // Fetches image based on product ID
                       alt={batch.name}
