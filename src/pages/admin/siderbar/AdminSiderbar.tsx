@@ -40,6 +40,12 @@ const AdminSidebar = () => {
         <Menu.Item key="consign" icon={<ContrastOutlined />}>
           <Link to="/admin/consignments">Manage Consignments</Link>
         </Menu.Item>
+        <Menu.Item key="consign" icon={<ContrastOutlined />}>
+          <Link to="/admin/promotion">Create promotion</Link>
+        </Menu.Item>
+        <Menu.Item key="consign" icon={<ContrastOutlined />}>
+          <Link to="/admin/promotion-list">View promotion list</Link>
+        </Menu.Item>
         <Menu.Item key="settings" icon={<SettingOutlined />}>
           <Link to="/admin/settings">System Settings</Link>
         </Menu.Item>

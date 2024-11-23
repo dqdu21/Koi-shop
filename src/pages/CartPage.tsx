@@ -5,7 +5,8 @@ import CartSummary from '../components/cart/CartSummary';
 import AppHeader from '../components/layout/AppHeader';
 import AppFooter from '../components/layout/AppFooter';
 import { getCartsAPI, removeProductFromCart } from '../services/cartService';
-import { CartData, CartItem as CartItemType } from '../models/cart'; // Import the types
+import { getPromotionDetailsAPI, getPromotionsAPI } from '../services/promotionService'; // Import API lấy danh sách khuyến mãi
+import { CartItem as CartItemType } from '../models/cart';
 import Sider from 'antd/es/layout/Sider';
 import { Content, Footer, Header } from 'antd/es/layout/layout';
 import AppSider from '../components/layout/AppSider';
@@ -19,15 +20,15 @@ const CartPage: React.FC = () => {
   const [price, setPrice] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [pricePaid, setPricePaid] = useState(0);
-  const [voucherCode, setVoucherCode] = useState(''); // Thêm state cho voucher
   const { collapsed } = useSider();
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
-  const { isLoggedIn } = useAuth();
-  const { user } = useAuth();
+  const { isLoggedIn, user } = useAuth();
+  const [promotions, setPromotions] = useState<any[]>([]); // Lưu danh sách khuyến mãi từ API
 
   useEffect(() => {
     if (isLoggedIn) {
       fetchCartItems();
+      fetchPromotions(); // Gọi API để lấy danh sách khuyến mãi
     }
   }, [isLoggedIn]);
 
@@ -35,27 +36,38 @@ const CartPage: React.FC = () => {
     setLoading(true);
     try {
       const response = await getCartsAPI();
+
       if (response.isSuccess && response.result.data.length > 0) {
-        const cart = response.result.data[response.result.data.length-1]; // Get the first cart
-        setCartItems(cart.cartItems); // Get cart items from the response
+        const cart = response.result.data[response.result.data.length - 1];
+        setCartItems(cart.cartItems);
         calculateCartSummary(cart.cartItems);
       } else {
         notification.info({ message: 'Info', description: 'No cart found.' });
       }
     } catch (error: any) {
-      console.error('Error fetching cart items:', error);
+      notification.error({ message: 'Error', description: 'Failed to fetch cart items.' });
     } finally {
       setLoading(false);
     }
   };
+
+  const fetchPromotions = async () => {
+    try {
+      const promotionsData = await getPromotionsAPI();
+      setPromotions(promotionsData); // Lưu danh sách khuyến mãi vào state
+    } catch (error: any) {
+      notification.error({ message: 'Error', description: error.message });
+    }
+  };
+  
+  
 
   const calculateCartSummary = (cartItems: CartItemType[]) => {
     let totalPrice = 0;
     let totalDiscount = 0;
 
     cartItems.forEach((item) => {
-      totalPrice = item.product.price*item.quantity + totalPrice; // Adjust based on your item structure
-      // Assuming each cart item has a discount property
+      totalPrice += item.product?.price || item.batch.price;
       totalDiscount += item.discount || 0;
     });
 
@@ -63,6 +75,37 @@ const CartPage: React.FC = () => {
     setDiscount(totalDiscount);
     setPricePaid(totalPrice - totalDiscount);
   };
+
+  const handleApplyVoucher = async (voucherCode: string) => {
+    if (!voucherCode.trim()) {
+      notification.warning({ message: 'Warning', description: 'Please enter a valid voucher code.' });
+      return;
+    }
+  
+    // Tìm mã khuyến mãi từ danh sách
+    const promotion = promotions.find((promo) => promo.discountCode.toUpperCase() === voucherCode.toUpperCase());
+  
+    if (!promotion) {
+      notification.error({ message: 'Error', description: 'Invalid voucher code.' });
+      return;
+    }
+  
+    // Gọi API để lấy chi tiết mã khuyến mãi
+    try {
+      const response = await getPromotionDetailsAPI(promotion.id); // Gọi API với ID
+  
+      const discountAmount = (price * response.discountPercentage) / 100;
+      setDiscount(discountAmount);
+      setPricePaid(price - discountAmount);
+  
+      notification.success({ message: 'Success', description: 'Voucher applied successfully!' });
+    } catch (error: any) {
+      notification.error({ message: 'Error', description: 'Failed to apply voucher.' });
+    }
+  };
+  
+  
+  
 
   const handleSelect = (id: string, selected: boolean) => {
     setSelectedItems((prev) => {
@@ -76,47 +119,15 @@ const CartPage: React.FC = () => {
     });
   };
 
-  const removeItem = async (productId: string, quantity: number) => {
-      await removeProductFromCart(user.cartId,productId,quantity);
-      fetchCartItems()
-  }
-
-  const handlePay = async () => {
-    try {
-      const res = await payOrder(user.cartId);
-      window.location.href = res.result.data.paymentUrl;
-      fetchCartItems();
-    } catch (error) {
-      console.error('Error processing payment:', error);
-    }
+  const removeItem = async (itemId: string) => {
+    await removeProductFromCart(user.cartId, itemId);
+    fetchCartItems();
   };
 
-  const handleApplyVoucher = async (voucherCode: string) => {
-    try {
-      // Gọi API áp dụng mã voucher
-      const response = await fetch('/api/voucher/apply', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          voucherCode,
-          cartId: user.cartId,
-        }),
-      });
-
-      const result = await response.json();
-      if (result.success) {
-        notification.success({ message: 'Voucher applied successfully!' });
-        setDiscount(result.discountAmount);
-        setPricePaid(price - result.discountAmount);
-      } else {
-        notification.error({ message: 'Failed to apply voucher.', description: result.message });
-      }
-    } catch (error) {
-      console.error('Error applying voucher:', error);
-      notification.error({ message: 'Error applying voucher.' });
-    }
+  const handlePay = async () => {
+    const res = await payOrder(user.cartId);
+    window.location.href = res.result.data.paymentUrl;
+    fetchCartItems();
   };
 
   return (
@@ -132,44 +143,38 @@ const CartPage: React.FC = () => {
           <Content className="flex-1 overflow-auto">
             <div className="container mx-auto p-4">
               <h1 className="text-2xl font-bold mb-6">Your Cart</h1>
-
               {loading ? (
                 <p>Loading...</p>
               ) : !isLoggedIn ? (
-                <div>
-                  <p>Please sign in to view your cart.</p>
-                </div>
+                <p>Please sign in to view your cart.</p>
               ) : cartItems.length === 0 ? (
                 <p>Your cart is empty</p>
               ) : (
-                <>
-                  <div className="mb-6">
-                    <div className="grid grid-cols-[2fr_1fr] gap-4">
-                      <div>
-                        {cartItems.map((item) => (
-                          <CartItem
-                            key={item.id}
-                            item={item}
-                            onRemove={removeItem}
-                            isSelected={selectedItems.has(item.id)}
-                            onSelect={handleSelect}
-                          />
-                        ))}
-                      </div>
-
-                      <CartSummary
-                        price_paid={pricePaid}
-                        price={price}
-                        discount={discount}
-                        cartItems={cartItems}
-                        selectedItems={selectedItems}
-                        onSelect={handleSelect}
-                        onPay={handlePay}
-                        onApplyVoucher={handleApplyVoucher} // Truyền hàm áp dụng voucher
-                      />
+                <div className="mb-6">
+                  <div className="grid grid-cols-[2fr_1fr] gap-4">
+                    <div>
+                      {cartItems.map((item) => (
+                        <CartItem
+                          key={item.id}
+                          item={item}
+                          onRemove={removeItem}
+                          isSelected={selectedItems.has(item.id)}
+                          onSelect={handleSelect}
+                        />
+                      ))}
                     </div>
+                    <CartSummary
+                      price_paid={pricePaid}
+                      price={price}
+                      discount={discount}
+                      cartItems={cartItems}
+                      selectedItems={selectedItems}
+                      onSelect={handleSelect}
+                      onPay={handlePay}
+                      onApplyVoucher={handleApplyVoucher} // Truyền hàm áp dụng mã khuyến mãi
+                    />
                   </div>
-                </>
+                </div>
               )}
             </div>
             <Footer className="footer mt-auto">

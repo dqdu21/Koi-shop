@@ -19,6 +19,10 @@ import About from './pages/About';
 import Blog from './pages/Blog';
 import Batch from './pages/admin/batch/batch';
 import Order from './pages/admin/order/order';
+import AdminPromotionPage from './pages/admin/promotion/AdminPromotionPage';
+import AdminPromotionList from './pages/admin/promotion/AdminPromotionList';
+import PromotionDetails from './pages/admin/promotion/PromotionDetails';
+import EditPromotion from './pages/admin/promotion/EditPromotion';
 // import Orders from './pages/admin/order/order';
 
 const AppRouter = () => {
@@ -46,6 +50,12 @@ const AppRouter = () => {
 
         {/* <Route path="/admin/order" element={<Orders />} />  */}
         <Route path="/admin/consignments" element={<AdminConsignment />} />
+        <Route path="/admin/promotion" element={<AdminPromotionPage />} />
+        <Route path="/admin/promotion-list" element={<AdminPromotionList />} />
+        <Route path="/admin/promotion/:id" element={<PromotionDetails />} />
+        <Route path="/admin/promotion/edit/:id" element={<EditPromotion />} />
+
+
 
                     {/* Staff Routes */}
         <Route path="/staff" element={<WelcomeStaff />} />
